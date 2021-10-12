@@ -9,4 +9,4 @@ Group Members:
 2. Tomanov Svtelin
 3. Keser Sergej
 4. Seifried Maximilian Jack
-5. Payer Maximmilian
+5. Payer Maximilian
