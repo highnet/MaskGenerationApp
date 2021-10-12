@@ -5,8 +5,8 @@ Mask Generation App environment for EBDV WS2021 TU Wien
 Entry points are ImageCropper.mlapp, ConfigureSettings.mlapp and CaseStudies.mlapp
 
 Group Members:
-1.
-2.
-3.
-4.
-5.
+1. Telleria Joaquin
+2. Tomanov Stelin
+3. Keser Sergej
+4. Seifried Maximilian Jack
+5. Payer Maximmilian
