@@ -21,6 +21,6 @@ octave-workspace
 # Simulink autosave extension
 .autosave
 
-output/*
 
+output/masks/*
 Images For Testing.zip
