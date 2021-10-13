@@ -145,10 +145,11 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             if (selectedDirectory == 0) % Make sure user didn't cancel uigetdir dialog
                 return;
             end
-            imwrite(app.maskedImage,strcat(selectedDirectory,"\img",num2str(app.displayedImageIndex),"_mask.png")); % store an image of the mask
-            imwrite(app.combinedImage,strcat(selectedDirectory,"\img",num2str(app.displayedImageIndex),"_mask_combined.png")); % store an image of the composite
-
-            app.UITable.Data(app.displayedImageIndex,4) = strcat(selectedDirectory,"\img",num2str(app.displayedImageIndex),"_mask.png"); % store the filepath of the mask back into the data table
+            
+            timestamp = num2str(posixtime(datetime)); 
+            imwrite(app.maskedImage,strcat(selectedDirectory,"\",timestamp,"_",num2str(app.displayedImageIndex),"_mask.png")); % store an image of the mask
+            imwrite(app.combinedImage,strcat(selectedDirectory,"\",timestamp,"_",num2str(app.displayedImageIndex),"_mask_combined.png")); % store an image of the composite
+            app.UITable.Data(app.displayedImageIndex,4) = strcat(selectedDirectory,"\",timestamp,"_mask.png"); % store the filepath of the mask back into the data table
         end
 
         % Button pushed function: NextButton
@@ -234,6 +235,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
             % Create Panel_2
             app.Panel_2 = uipanel(app.UIFigure);
+            app.Panel_2.Visible = 'off';
             app.Panel_2.Position = [4 419 172 84];
 
             % Create OtsusThresholdLabel

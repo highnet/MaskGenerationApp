@@ -83,12 +83,6 @@ classdef ImageLoading_exported < matlab.apps.AppBase
                 return;
             end
             app.UITable.Data(app.displayedImageIndex,:) = []; % delete the row
-            app.displayedImageIndex = app.displayedImageIndex-1; % subtract the selected row reference
-            if(app.displayedImageIndex >= 1) % if there is at least one image left in the table
-                updateimage(app); % update the displayed image
-            else
-            app.Image.ImageSource = ""; % set the shown image to the default blank image
-            end
         end
 
         % Button pushed function: NextStepButton

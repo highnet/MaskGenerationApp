@@ -18,6 +18,8 @@ classdef ImageCropper_exported < matlab.apps.AppBase
         SelectCropBoxButton    matlab.ui.control.Button
         Step1aCropImagesLabel  matlab.ui.control.Label
         LoadImageButton        matlab.ui.control.Button
+        RemoveImageButton      matlab.ui.control.Button
+        Label                  matlab.ui.control.Label
     end
 
     
@@ -34,9 +36,7 @@ classdef ImageCropper_exported < matlab.apps.AppBase
         
         function updateDisplayedImages(app) % displays an image from the data table
             
-            image = imread(app.UITable.Data(app.displayedImageIndex,1)); % set the image from the data table
-
-            app.Image.ImageSource = image;
+              app.Image.ImageSource  = imread(app.UITable.Data(app.displayedImageIndex,1)); % set the image from the data table
 
         end
         
@@ -67,7 +67,7 @@ classdef ImageCropper_exported < matlab.apps.AppBase
             for i = 1:size(app.UITable.Data,1) % iterate through every row of the data table
                 image = imread(app.UITable.Data(i,1)); % read the image from the filename(first cell) stored in the data table row
                 image = imcrop(image,[app.P1 app.P2 app.P3 app.P4]); % crop the image within the cropping box
-                imwrite(image,strcat(selectedDirectory,"\img",num2str(i),"_cropped.png")); % save the image on the chosen directory
+                imwrite(image,strcat(selectedDirectory,"\",num2str(posixtime(datetime)),"_cropped.png")); % save the image on the chosen directory
             end
         end
     end
@@ -85,6 +85,7 @@ classdef ImageCropper_exported < matlab.apps.AppBase
         function UITableCellSelection(app, event)
             indices = event.Indices;
             app.displayedImageIndex = indices(1); % sets the displayedImageIndex to the row of the selected cell
+            app.Label.Text = num2str(app.displayedImageIndex);
             updateDisplayedImages(app); % update the displayed image
         end
 
@@ -108,6 +109,14 @@ classdef ImageCropper_exported < matlab.apps.AppBase
         % Button pushed function: LoadImageButton
         function LoadImageButtonPushed(app, event)
             loadimage(app); % load a new image
+        end
+
+        % Button pushed function: RemoveImageButton
+        function RemoveImageButtonPushed(app, event)
+            if(isempty(app.UITable.Data))
+                return;
+            end
+            app.UITable.Data(app.displayedImageIndex,:) = []; % delete the row
         end
     end
 
@@ -203,6 +212,17 @@ classdef ImageCropper_exported < matlab.apps.AppBase
             app.LoadImageButton.ButtonPushedFcn = createCallbackFcn(app, @LoadImageButtonPushed, true);
             app.LoadImageButton.Position = [85 257 100 22];
             app.LoadImageButton.Text = 'Load Image';
+
+            % Create RemoveImageButton
+            app.RemoveImageButton = uibutton(app.UIFigure, 'push');
+            app.RemoveImageButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveImageButtonPushed, true);
+            app.RemoveImageButton.Position = [85 218 100 22];
+            app.RemoveImageButton.Text = 'Remove Image';
+
+            % Create Label
+            app.Label = uilabel(app.UIFigure);
+            app.Label.Position = [45 549 25 22];
+            app.Label.Text = '0';
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
