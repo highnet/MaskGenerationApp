@@ -30,3 +30,6 @@ Images For Testing.zip
 output/*
 !output/.gitkeep 
 
+input/*
+!input/.gitkeep
+
