@@ -220,6 +220,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
             % Create Panel_3
             app.Panel_3 = uipanel(app.UIFigure);
+            app.Panel_3.Visible = 'off';
             app.Panel_3.Position = [4 511 172 84];
 
             % Create RegionGrowingLabel
