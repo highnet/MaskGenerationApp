@@ -11,6 +11,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
         OtsusThresholdingButton       matlab.ui.control.RadioButton
         RegionGrowingButton           matlab.ui.control.RadioButton
         ConnectedComponentLabelingButton  matlab.ui.control.RadioButton
+        Method10Button                matlab.ui.control.RadioButton
         LocationEditFieldLabel        matlab.ui.control.Label
         LocationEditField             matlab.ui.control.EditField
         PixelSizeEditFieldLabel       matlab.ui.control.Label
@@ -83,6 +84,11 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.ConnectedComponentLabelingButton = uiradiobutton(app.ChoseyourmethodButtonGroup);
             app.ConnectedComponentLabelingButton.Text = 'Connected Component Labeling';
             app.ConnectedComponentLabelingButton.Position = [11 18 195 22];
+
+            % Create Method10Button
+            app.Method10Button = uiradiobutton(app.ChoseyourmethodButtonGroup);
+            app.Method10Button.Text = 'Method 10';
+            app.Method10Button.Position = [12 -3 79 22];
 
             % Create LocationEditFieldLabel
             app.LocationEditFieldLabel = uilabel(app.UIFigure);

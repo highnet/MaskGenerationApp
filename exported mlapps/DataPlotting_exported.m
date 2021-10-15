@@ -10,6 +10,15 @@ classdef DataPlotting_exported < matlab.apps.AppBase
         UIAxes                    matlab.ui.control.UIAxes
     end
 
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Button pushed function: LoadMaskButton
+        function LoadMaskButtonPushed(app, event)
+
+        end
+    end
+
     % Component initialization
     methods (Access = private)
 
@@ -34,6 +43,7 @@ classdef DataPlotting_exported < matlab.apps.AppBase
 
             % Create LoadMaskButton
             app.LoadMaskButton = uibutton(app.UIFigure, 'push');
+            app.LoadMaskButton.ButtonPushedFcn = createCallbackFcn(app, @LoadMaskButtonPushed, true);
             app.LoadMaskButton.Position = [271 198 100 22];
             app.LoadMaskButton.Text = 'Load Mask';
 

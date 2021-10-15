@@ -182,7 +182,7 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             app.UITable.ColumnSortable = [true true true true];
             app.UITable.ColumnEditable = [false true false false];
             app.UITable.CellSelectionCallback = createCallbackFcn(app, @UITableCellSelection, true);
-            app.UITable.Position = [72 52 768 176];
+            app.UITable.Position = [46 55 768 176];
 
             % Create RemoveImageButton
             app.RemoveImageButton = uibutton(app.UIFigure, 'push');
