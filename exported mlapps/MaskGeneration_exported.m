@@ -38,7 +38,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
         maskedImage; % logical. A reference to the mask of the currently displayed image
         combinedImage; % uint8. A composite of the original+mask of the currently displayed image.
         flippedMask = 0; % double. A boolean for flipping the mask colors.
-        masks; %cell. A storage matrix of all masks of all images
+        masks; % cell. A storage matrix of all masks of all images
         
     end
     
@@ -56,8 +56,8 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
                     else
                         app.maskedImage = rgb2gray(app.originalImage) <= app.Slider.Value; % compute a binary mask (<=)
                     end
+                    app.masks{app.displayedImageIndex} = app.maskedImage; % we save the mask on the masks cell
             end
-
             
             % Do Otsu's Thresholding
             if app.method == "Otsu's Thresholding" % check if we are on the otsu's thresholding mode
@@ -95,11 +95,10 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             for (i = 1:top)
                 foreGroundPixels = app.maskedImage >= i;
                 backGroundPixels = ~foreGroundPixels;
-                
+                <<
                 numberOfPixelsInForeground = sum(foreGroundPixels(:) == 1);
                 meanIntensityOfForeground = mean(app.maskedImage(app.maskedImage >= i));
-
-
+                
                 numberOfPixelsInBackground = sum(backGroundPixels(:) == 1);
                 meanIntensityOfBackground = mean(app.maskedImage(app.maskedImage < i));
                     
