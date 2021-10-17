@@ -6,7 +6,7 @@ Entry points are ImageCropper.mlapp, ConfigureSettings.mlapp and CaseStudies.mla
 
 Group Members:
 1. Telleria Joaquin
-2. Tomanov Svtelin
+2. Tomanov Svetlin
 3. Keser Sergej
 4. Seifried Maximilian Jack
 5. Payer Maximilian
