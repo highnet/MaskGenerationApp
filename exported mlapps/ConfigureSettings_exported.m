@@ -10,12 +10,12 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
         ManualThresholdingButton      matlab.ui.control.RadioButton
         OtsusThresholdingButton       matlab.ui.control.RadioButton
         RegionGrowingButton           matlab.ui.control.RadioButton
-        ConnectedComponentLabelingButton  matlab.ui.control.RadioButton
-        Method10Button                matlab.ui.control.RadioButton
+        EdgeDetectionButton           matlab.ui.control.RadioButton
         LocationEditFieldLabel        matlab.ui.control.Label
         LocationEditField             matlab.ui.control.EditField
         PixelSizeEditFieldLabel       matlab.ui.control.Label
         PixelSizeEditField            matlab.ui.control.EditField
+        ConnectedComponentLabelingCheckBox  matlab.ui.control.CheckBox
     end
 
     % Callbacks that handle component events
@@ -62,33 +62,28 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             % Create ChoseyourmethodButtonGroup
             app.ChoseyourmethodButtonGroup = uibuttongroup(app.UIFigure);
             app.ChoseyourmethodButtonGroup.Title = 'Chose your method:';
-            app.ChoseyourmethodButtonGroup.Position = [16 70 204 129];
+            app.ChoseyourmethodButtonGroup.Position = [16 89 204 110];
 
             % Create ManualThresholdingButton
             app.ManualThresholdingButton = uiradiobutton(app.ChoseyourmethodButtonGroup);
             app.ManualThresholdingButton.Text = 'Manual Thresholding';
-            app.ManualThresholdingButton.Position = [11 83 134 22];
+            app.ManualThresholdingButton.Position = [11 64 134 22];
             app.ManualThresholdingButton.Value = true;
 
             % Create OtsusThresholdingButton
             app.OtsusThresholdingButton = uiradiobutton(app.ChoseyourmethodButtonGroup);
             app.OtsusThresholdingButton.Text = 'Otsu''s Thresholding';
-            app.OtsusThresholdingButton.Position = [11 61 128 22];
+            app.OtsusThresholdingButton.Position = [11 42 128 22];
 
             % Create RegionGrowingButton
             app.RegionGrowingButton = uiradiobutton(app.ChoseyourmethodButtonGroup);
             app.RegionGrowingButton.Text = 'Region Growing';
-            app.RegionGrowingButton.Position = [11 39 108 22];
+            app.RegionGrowingButton.Position = [11 20 108 22];
 
-            % Create ConnectedComponentLabelingButton
-            app.ConnectedComponentLabelingButton = uiradiobutton(app.ChoseyourmethodButtonGroup);
-            app.ConnectedComponentLabelingButton.Text = 'Connected Component Labeling';
-            app.ConnectedComponentLabelingButton.Position = [11 18 195 22];
-
-            % Create Method10Button
-            app.Method10Button = uiradiobutton(app.ChoseyourmethodButtonGroup);
-            app.Method10Button.Text = 'Method 10';
-            app.Method10Button.Position = [12 -3 79 22];
+            % Create EdgeDetectionButton
+            app.EdgeDetectionButton = uiradiobutton(app.ChoseyourmethodButtonGroup);
+            app.EdgeDetectionButton.Text = 'Edge Detection';
+            app.EdgeDetectionButton.Position = [11 -1 104 22];
 
             % Create LocationEditFieldLabel
             app.LocationEditFieldLabel = uilabel(app.UIFigure);
@@ -109,6 +104,11 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             % Create PixelSizeEditField
             app.PixelSizeEditField = uieditfield(app.UIFigure, 'text');
             app.PixelSizeEditField.Position = [82 207 100 22];
+
+            % Create ConnectedComponentLabelingCheckBox
+            app.ConnectedComponentLabelingCheckBox = uicheckbox(app.UIFigure);
+            app.ConnectedComponentLabelingCheckBox.Text = 'Connected Component Labeling';
+            app.ConnectedComponentLabelingCheckBox.Position = [29 42 195 22];
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
