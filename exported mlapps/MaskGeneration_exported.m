@@ -116,6 +116,22 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
              app.maskedImage = rgb2gray(app.originalImage) <= level; % compute a binary mask (>=)
 
         end
+        
+        function results = connectedComponentLabeling(app)
+            
+        end
+        
+        function results = edgeDetection(app)
+            
+        end
+        
+        function results = regionGrowing(app)
+            
+        end
+        
+        function results = noiseRemoval(app)
+            
+        end
     end
     
 
