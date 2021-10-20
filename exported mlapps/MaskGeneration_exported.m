@@ -32,7 +32,9 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
         location; % char. The location of the sattelite images
         pixelSize; % char. The pixel size of the satellite images
         method; % char. The method of segmentation used 
-        imageData; % string. The data table from the previous ImageLoading app
+        imageData;
+        images; % cell.
+        imagesCount; % uint8
         displayedImageIndex = 1; % double. The index of the currently displayed image
         originalImage; % uint8. A reference to the unaltered currently displayed image
         maskedImage; % logical. A reference to the mask of the currently displayed image
@@ -46,7 +48,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
         
         function updateDisplayedImages(app) % updates the displayed images
 
-            app.originalImage = imread(app.imageData(app.displayedImageIndex,1)); % load the original image from the data table
+            app.originalImage = app.images{1,app.displayedImageIndex}; % load the original image from the data table
 
             % Do manual thresholding
             if app.method == "Manual Thresholding"
@@ -84,7 +86,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             end
            
             
-            app.ImageCounter.Text = strcat("Image ", num2str(app.displayedImageIndex), " of ", num2str(size(app.imageData,1))); % set the displayed image text
+            app.ImageCounter.Text = strcat("Image ", num2str(app.displayedImageIndex), " of ", num2str(app.imagesCount)); % set the displayed image text
             app.Image.ImageSource = app.originalImage; % set the imagesource1 to the original image
             app.Image2.ImageSource = im2uint8(cat(3,app.maskedImage,app.maskedImage,app.maskedImage)); % set the imagesource2 to the masked image (the grayscale mask has to be temporarily converted to a RGB image in order to be displayed in the image component)
             app.combinedImage = im2uint8(cat(3,app.maskedImage,app.maskedImage,app.maskedImage)) + app.originalImage; % create a composite image of the original image plus the image's mask
@@ -139,11 +141,13 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
     methods (Access = private)
 
         % Code that executes after component creation
-        function startupFcn(app, location, pixelSize, method, imageData)
+        function startupFcn(app, location, pixelSize, method, imageData, images, imagesCount)
             app.location = location; % store the location value
             app.pixelSize = pixelSize; % store the pixel size value
             app.method = method; % store the method value
             app.imageData = imageData; % store the image data value (the image data is the entire table from the previous ImageLoading window)
+            app.images = images;
+            app.imagesCount = imagesCount;
             app.UITable.Data = imageData; % copy the imagedata into a new table
             if (strcmp(method,"Manual Thresholding")) % Turn on the UI components exclusive to the Manual Thresholding method
                 app.Panel.Visible = true;
@@ -152,7 +156,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             elseif (strcmp(method,"Region Growing")) % Turn on the UI components exclusive to the Region Growing method
                 app.Panel_3.Visible = true;
             end
-            app.masks = cell(1,size(imageData,1)); % create a new storage matrix for all masks of all pictures, this is initially empty.
+            app.masks = cell(1,imagesCount); % create a new storage matrix for all masks of all pictures, this is initially empty.
             updateDisplayedImages(app); % update the displayed images
             
         end
@@ -167,7 +171,6 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             timestamp = num2str(posixtime(datetime)); 
             imwrite(app.maskedImage,strcat(selectedDirectory,"\",timestamp,"_",num2str(app.displayedImageIndex),"_mask.png")); % store an image of the mask
             imwrite(app.combinedImage,strcat(selectedDirectory,"\",timestamp,"_",num2str(app.displayedImageIndex),"_mask_combined.png")); % store an image of the composite
-            app.UITable.Data(app.displayedImageIndex,4) = strcat(selectedDirectory,"\",timestamp,"_mask.png"); % store the filepath of the mask back into the data table
         end
 
         % Button pushed function: NextButton
@@ -332,7 +335,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
             % Create UITable
             app.UITable = uitable(app.UIFigure);
-            app.UITable.ColumnName = {'Image Filepath'; 'Image Year'; 'Size(x;y;dimensions)'; 'Masked Image Filepath'};
+            app.UITable.ColumnName = {'Image #'; 'Image Year'; 'Size(x;y;dimensions)'};
             app.UITable.RowName = {};
             app.UITable.ColumnSortable = [true true true true];
             app.UITable.ColumnEditable = [false true false false];

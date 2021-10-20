@@ -4,7 +4,7 @@ classdef ImageLoading_exported < matlab.apps.AppBase
     properties (Access = public)
         UIFigure                  matlab.ui.Figure
         FileMenu                  matlab.ui.container.Menu
-        LoadImageButton           matlab.ui.control.Button
+        LoadPNGButton             matlab.ui.control.Button
         Image                     matlab.ui.control.Image
         NextStepButton            matlab.ui.control.Button
         Step2LoadyourImagesLabel  matlab.ui.control.Label
@@ -16,7 +16,6 @@ classdef ImageLoading_exported < matlab.apps.AppBase
         metLabel                  matlab.ui.control.Label
         ProjectMetadataLabel      matlab.ui.control.Label
         UITable                   matlab.ui.control.Table
-        RemoveImageButton         matlab.ui.control.Button
         PictureMetadataLabel      matlab.ui.control.Label
     end
 
@@ -26,20 +25,22 @@ classdef ImageLoading_exported < matlab.apps.AppBase
         location; %char. The location of the sattelite images
         pixelSize; %char. The pixel size of the satellite images
         method; %char. The method of segmentation used
+        images;
+        imagesCount = 0;
     end
     methods (Access = private)
         
         function updateimage(app) % updates the image displayed on the screen
-            app.Image.ImageSource = imread(app.UITable.Data(app.displayedImageIndex,1)); % set the image from the data table
+            app.Image.ImageSource = app.images{1,app.displayedImageIndex}; % set the image from the data table
             
         end
         
         function loadimage(app)                 
+ 
+            filterspec = {'*.png;','.PNG Image Files'};
 
-            filterspec = {'*.jpg;*.png;*.gif','All Image Files'};
             [file, path] = uigetfile(filterspec); % Display uigetfile dialog
             
-
             if (ischar(path)) % Make sure user didn't cancel uigetfile dialog
                filename = [path file]; % set filename
             else
@@ -48,7 +49,9 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             
             image = imread(filename); % read image from file name
             [height, width, dim] = size(image); % get image properties
-            app.UITable.Data = [app.UITable.Data ; [filename,"1990",strcat(num2str(height),"x", num2str(width), "x",num2str(dim)),""]]; % add data of the new image to the data table
+            app.imagesCount = app.imagesCount + 1;
+            app.images{1,app.imagesCount} = image;
+            app.UITable.Data = [app.UITable.Data ; [app.imagesCount,"1990",strcat(num2str(height),"x", num2str(width), "x",num2str(dim))]]; % add data of the new image to the data table
         end
     end
 
@@ -63,10 +66,11 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             app.locLabel.Text = location; %  set the location label
             app.pixsizLabel.Text = pixelSize; % set the pixel size labe
             app.metLabel.Text = method; % set the method label
+            app.images = cell(1,100);
         end
 
-        % Button pushed function: LoadImageButton
-        function LoadImageButtonPushed(app, event)
+        % Button pushed function: LoadPNGButton
+        function LoadPNGButtonPushed(app, event)
             loadimage(app); % load a new image
         end
 
@@ -77,26 +81,13 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             updateimage(app); % update the displayed image
         end
 
-        % Button pushed function: RemoveImageButton
-        function RemoveImageButtonPushed(app, event)
-            if(isempty(app.UITable.Data))
-                return;
-            end
-            app.UITable.Data(app.displayedImageIndex,:) = []; % delete the row
-        end
-
         % Button pushed function: NextStepButton
         function NextStepButtonPushed(app, event)
             if(isempty(app.UITable.Data)) % make sure the user has uploaded at least one image
                 return;
             end
-            MaskGeneration(app.locLabel.Text,app.pixsizLabel.Text,app.metLabel.Text,app.UITable.Data); % open a MaskGeneration window with the parameters
+            MaskGeneration(app.locLabel.Text,app.pixsizLabel.Text,app.metLabel.Text,app.UITable.Data,app.images,app.imagesCount); % open a MaskGeneration window with the parameters
             app.delete; % close this window
-        end
-
-        % Image clicked function: Image
-        function ImageClicked(app, event)
-            loadimage(app); % load a new image
         end
     end
 
@@ -116,15 +107,14 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             app.FileMenu.Enable = 'off';
             app.FileMenu.Text = 'File';
 
-            % Create LoadImageButton
-            app.LoadImageButton = uibutton(app.UIFigure, 'push');
-            app.LoadImageButton.ButtonPushedFcn = createCallbackFcn(app, @LoadImageButtonPushed, true);
-            app.LoadImageButton.Position = [227 17 100 22];
-            app.LoadImageButton.Text = 'Load Image';
+            % Create LoadPNGButton
+            app.LoadPNGButton = uibutton(app.UIFigure, 'push');
+            app.LoadPNGButton.ButtonPushedFcn = createCallbackFcn(app, @LoadPNGButtonPushed, true);
+            app.LoadPNGButton.Position = [258 17 100 22];
+            app.LoadPNGButton.Text = {'Load .PNG'; ''};
 
             % Create Image
             app.Image = uiimage(app.UIFigure);
-            app.Image.ImageClickedFcn = createCallbackFcn(app, @ImageClicked, true);
             app.Image.Tooltip = {'Here you can load as many images as you want and edit their image year in the table blow.'; ''; 'Warning: all images should have the same size(x;y;dimensions) and be taken by the same satellite at different dates for meaningful results.'};
             app.Image.Position = [298 251 194 196];
 
@@ -177,18 +167,12 @@ classdef ImageLoading_exported < matlab.apps.AppBase
 
             % Create UITable
             app.UITable = uitable(app.UIFigure);
-            app.UITable.ColumnName = {'Image Filepath'; 'Image Year'; 'Size(x;y;dimensions)'; 'Masked Image Filepath'};
+            app.UITable.ColumnName = {'Image #'; 'Image Year'; 'Size(x;y;dimensions)'};
             app.UITable.RowName = {};
             app.UITable.ColumnSortable = [true true true true];
             app.UITable.ColumnEditable = [false true false false];
             app.UITable.CellSelectionCallback = createCallbackFcn(app, @UITableCellSelection, true);
             app.UITable.Position = [46 55 768 176];
-
-            % Create RemoveImageButton
-            app.RemoveImageButton = uibutton(app.UIFigure, 'push');
-            app.RemoveImageButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveImageButtonPushed, true);
-            app.RemoveImageButton.Position = [392 17 100 22];
-            app.RemoveImageButton.Text = 'Remove Image';
 
             % Create PictureMetadataLabel
             app.PictureMetadataLabel = uilabel(app.UIFigure);

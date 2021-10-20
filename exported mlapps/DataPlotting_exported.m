@@ -15,7 +15,7 @@ classdef DataPlotting_exported < matlab.apps.AppBase
 
         % Button pushed function: LoadMaskButton
         function LoadMaskButtonPushed(app, event)
-
+            
         end
     end
 

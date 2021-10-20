@@ -17,8 +17,7 @@ classdef ImageCropper_exported < matlab.apps.AppBase
         UITable                      matlab.ui.control.Table
         SelectCropBoxButton          matlab.ui.control.Button
         Step1aCropImagesLabel        matlab.ui.control.Label
-        LoadImageButton              matlab.ui.control.Button
-        RemoveImageButton            matlab.ui.control.Button
+        LoadPNGButton                matlab.ui.control.Button
         Label                        matlab.ui.control.Label
         CropThisImageButton          matlab.ui.control.Button
         SetManualCropBoxLabel        matlab.ui.control.Label
@@ -26,6 +25,7 @@ classdef ImageCropper_exported < matlab.apps.AppBase
         OffButton                    matlab.ui.control.RadioButton
         histogramequalizationButton  matlab.ui.control.RadioButton
         adaptivehistogramequalizationButton  matlab.ui.control.RadioButton
+        LoadTIFButton                matlab.ui.control.Button
     end
 
     
@@ -35,6 +35,8 @@ classdef ImageCropper_exported < matlab.apps.AppBase
         P2; % double. The second point of the cropping box
         P3; % double. The third point of the cropping box
         P4; % double. The fourth point of the cropping box
+        images;
+        imagesCount = 0;
 
     end
     
@@ -42,15 +44,18 @@ classdef ImageCropper_exported < matlab.apps.AppBase
         
         function updateDisplayedImages(app) % displays an image from the data table
             
-              app.Image.ImageSource  = imread(app.UITable.Data(app.displayedImageIndex,1)); % set the image from the data table
+              app.Image.ImageSource  = app.images{1,app.displayedImageIndex};
 
         end
         
-        function loadimage(app) % loads an image into the data table
-
-            filterspec = {'*.png','All Image Files'};  % Display uigetfile dialog
+        function loadimage(app,format) % loads an image into the data table
+    
+            if (format == 'png')
+               filterspec = {'*.png','.PNG file'};  % Display uigetfile dialog
+            elseif (format == 'tif')
+               filterspec = {'*.tif','.TIF file'};  % Display uigetfile dialog
+            end
             [file, path] = uigetfile(filterspec); % get filename from user
-            
 
             if (ischar(path)) % Make sure user didn't cancel uigetfile dialog
                filename = [path file]; % set filename
@@ -59,8 +64,16 @@ classdef ImageCropper_exported < matlab.apps.AppBase
             end
             
             image = imread(filename); % read image from file name
+            
+            if (format == 'tif')
+                [rgbgray,cmap] = gray2ind(image,256);
+                image = cat (3, rgbgray, rgbgray, rgbgray);   
+            end
+            
             [height, width, dim] = size(image); % get image properties
-            app.UITable.Data = [app.UITable.Data ; [filename,strcat(num2str(height),"x", num2str(width), "x",num2str(dim))]]; % add data of the new image to the data table
+            app.imagesCount = app.imagesCount + 1;
+            app.images{1,app.imagesCount} = image;
+            app.UITable.Data = [app.UITable.Data ; [app.imagesCount,strcat(num2str(height),"x", num2str(width), "x",num2str(dim))]]; % add data of the new image to the data table
         end
         
         function cropImages(app,mode) % crops all images
@@ -71,8 +84,8 @@ classdef ImageCropper_exported < matlab.apps.AppBase
             end
             
             if (mode == 0)
-                for i = 1:size(app.UITable.Data,1) % iterate through every row of the data table
-                image = imread(app.UITable.Data(i,1)); % read the image from the filename(first cell) stored in the data table row
+                for i = 1:app.imagesCount 
+                image = app.images{1,i};
                 image = imcrop(image,[app.P1 app.P2 app.P3 app.P4]); % crop the image within the cropping box
                 if (app.adaptivehistogramequalizationButton.Value == true)
                     image = histeq(image);
@@ -82,7 +95,7 @@ classdef ImageCropper_exported < matlab.apps.AppBase
                 imwrite(image,strcat(selectedDirectory,"\",num2str(posixtime(datetime)),"_cropped.png")); % save the image on the chosen directory
                 end
             elseif (mode == 1)
-                image = imread(app.UITable.Data(app.displayedImageIndex,1)); % read the image from the filename(first cell) stored in the data table row
+                image = app.images{1,app.displayedImageIndex};
                 image = imcrop(image,[app.P1 app.P2 app.P3 app.P4]); % crop the image within the cropping box
                 if (app.adaptivehistogramequalizationButton.Value == true)
                     image = histeq(image);
@@ -99,9 +112,9 @@ classdef ImageCropper_exported < matlab.apps.AppBase
     % Callbacks that handle component events
     methods (Access = private)
 
-        % Image clicked function: Image
-        function ImageClicked(app, event)
-                loadimage(app); % load a new image
+        % Code that executes after component creation
+        function startupFcn(app)
+             app.images = cell(1,100); % create a new storage matrix for all masks of all pictures, this is initially empty.
         end
 
         % Cell selection callback: UITable
@@ -119,7 +132,7 @@ classdef ImageCropper_exported < matlab.apps.AppBase
 
         % Button pushed function: SelectCropBoxButton
         function SelectCropBoxButtonPushed(app, event)
-            image = imread(app.UITable.Data(app.displayedImageIndex,1)); % read the displayed image
+            image = app.images{1,app.displayedImageIndex}; % read the displayed image
             imshow(image); % show the image
             rect = drawrectangle(); % get a rectangle from the user
             app.P1 = rect.Position(1); % set the first point of the cropping box
@@ -129,22 +142,20 @@ classdef ImageCropper_exported < matlab.apps.AppBase
 
         end
 
-        % Button pushed function: LoadImageButton
-        function LoadImageButtonPushed(app, event)
-            loadimage(app); % load a new image
-        end
-
-        % Button pushed function: RemoveImageButton
-        function RemoveImageButtonPushed(app, event)
-            if(isempty(app.UITable.Data))
-                return;
-            end
-            app.UITable.Data(app.displayedImageIndex,:) = []; % delete the row
+        % Button pushed function: LoadPNGButton
+        function LoadPNGButtonPushed(app, event)
+            loadimage(app,'png'); % load a new image
         end
 
         % Button pushed function: CropThisImageButton
         function CropThisImageButtonPushed(app, event)
                 cropImages(app,1);
+        end
+
+        % Button pushed function: LoadTIFButton
+        function LoadTIFButtonPushed(app, event)
+            loadimage(app,'tif'); % load a new image
+
         end
     end
 
@@ -166,7 +177,6 @@ classdef ImageCropper_exported < matlab.apps.AppBase
 
             % Create Image
             app.Image = uiimage(app.UIFigure);
-            app.Image.ImageClickedFcn = createCallbackFcn(app, @ImageClicked, true);
             app.Image.Position = [234 273 304 299];
 
             % Create CropAllImagesButton
@@ -217,7 +227,7 @@ classdef ImageCropper_exported < matlab.apps.AppBase
 
             % Create UITable
             app.UITable = uitable(app.UIFigure);
-            app.UITable.ColumnName = {'Image Filepath'; 'Dimensions'};
+            app.UITable.ColumnName = {'Image #'; 'Dimensions'};
             app.UITable.RowName = {};
             app.UITable.ColumnSortable = [true true];
             app.UITable.ColumnEditable = [false false];
@@ -235,17 +245,11 @@ classdef ImageCropper_exported < matlab.apps.AppBase
             app.Step1aCropImagesLabel.Position = [15 576 122 22];
             app.Step1aCropImagesLabel.Text = 'Step 1a: Crop Images';
 
-            % Create LoadImageButton
-            app.LoadImageButton = uibutton(app.UIFigure, 'push');
-            app.LoadImageButton.ButtonPushedFcn = createCallbackFcn(app, @LoadImageButtonPushed, true);
-            app.LoadImageButton.Position = [273 15 100 22];
-            app.LoadImageButton.Text = 'Load Image';
-
-            % Create RemoveImageButton
-            app.RemoveImageButton = uibutton(app.UIFigure, 'push');
-            app.RemoveImageButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveImageButtonPushed, true);
-            app.RemoveImageButton.Position = [396 15 100 22];
-            app.RemoveImageButton.Text = 'Remove Image';
+            % Create LoadPNGButton
+            app.LoadPNGButton = uibutton(app.UIFigure, 'push');
+            app.LoadPNGButton.ButtonPushedFcn = createCallbackFcn(app, @LoadPNGButtonPushed, true);
+            app.LoadPNGButton.Position = [277 15 100 22];
+            app.LoadPNGButton.Text = 'Load .PNG';
 
             % Create Label
             app.Label = uilabel(app.UIFigure);
@@ -284,6 +288,12 @@ classdef ImageCropper_exported < matlab.apps.AppBase
             app.adaptivehistogramequalizationButton.Text = 'adaptive histogram equalization';
             app.adaptivehistogramequalizationButton.Position = [11 6 192 22];
 
+            % Create LoadTIFButton
+            app.LoadTIFButton = uibutton(app.UIFigure, 'push');
+            app.LoadTIFButton.ButtonPushedFcn = createCallbackFcn(app, @LoadTIFButtonPushed, true);
+            app.LoadTIFButton.Position = [408 15 100 22];
+            app.LoadTIFButton.Text = 'Load .TIF';
+
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
         end
@@ -300,6 +310,9 @@ classdef ImageCropper_exported < matlab.apps.AppBase
 
             % Register the app with App Designer
             registerApp(app, app.UIFigure)
+
+            % Execute the startup function
+            runStartupFcn(app, @startupFcn)
 
             if nargout == 0
                 clear app
