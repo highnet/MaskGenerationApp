@@ -219,6 +219,12 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
            app.masks{app.displayedImageIndex} = app.maskedImage; % save the mask so we can keep adding information to it
            app.updateDisplayedImages(); % update the displayed images
         end
+
+        % Button pushed function: NextStepButton
+        function NextStepButtonPushed(app, event)
+            DataPlotting(app.location,app.pixelSize,app.method,app.imageData,app.images,app.imagesCount,app.masks);
+            app.delete;
+        end
     end
 
     % Component initialization
@@ -329,7 +335,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
             % Create NextStepButton
             app.NextStepButton = uibutton(app.UIFigure, 'push');
-            app.NextStepButton.Enable = 'off';
+            app.NextStepButton.ButtonPushedFcn = createCallbackFcn(app, @NextStepButtonPushed, true);
             app.NextStepButton.Position = [610 226 100 22];
             app.NextStepButton.Text = 'Next Step';
 
