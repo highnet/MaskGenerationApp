@@ -36,9 +36,6 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
         images; % cell.
         imagesCount; % uint8
         displayedImageIndex = 1; % double. The index of the currently displayed image
-        originalImage; % uint8. A reference to the unaltered currently displayed image
-        maskedImage; % logical. A reference to the mask of the currently displayed image
-        combinedImage; % uint8. A composite of the original+mask of the currently displayed image.
         flippedMask = 0; % double. A boolean for flipping the mask colors.
         masks; %cell. A storage matrix of all masks of all images
         
@@ -140,13 +137,14 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
         
         function updateDisplayedImages(app) % updates the displayed images
             
-            app.originalImage = app.images{1,app.displayedImageIndex}; % load the original image from the data table
-            app.maskedImage = app.masks{app.displayedImageIndex}; % Load a mask from the masks cell if it already exists
+            originalImage = app.images{1,app.displayedImageIndex}; % load the original image from the data table
+            maskedImage = app.masks{app.displayedImageIndex}; % Load a mask from the masks cell if it already exists
+            combinedImage = im2uint8(cat(3,maskedImage,maskedImage,maskedImage)) + originalImage; % create a composite image of the original image plus the image's mask
+            
             app.ImageCounterLabel.Text = strcat("Image ", num2str(app.displayedImageIndex), " of ", num2str(app.imagesCount)); % set the displayed image text
-            app.Image.ImageSource = app.originalImage; % set the imagesource1 to the original image
-            app.Image2.ImageSource = im2uint8(cat(3,app.maskedImage,app.maskedImage,app.maskedImage)); % set the imagesource2 to the masked image (the grayscale mask has to be temporarily converted to a RGB image in order to be displayed in the image component)
-            app.combinedImage = im2uint8(cat(3,app.maskedImage,app.maskedImage,app.maskedImage)) + app.originalImage; % create a composite image of the original image plus the image's mask
-            app.Image3.ImageSource = app.combinedImage; % set the imagesource3 to the combined image
+            app.Image.ImageSource = originalImage; % set the imagesource1 to the original image
+            app.Image2.ImageSource = im2uint8(cat(3,maskedImage,maskedImage,maskedImage)); % set the imagesource2 to the masked image (the grayscale mask has to be temporarily converted to a RGB image in order to be displayed in the image component)
+            app.Image3.ImageSource = combinedImage; % set the imagesource3 to the combined image
         end
         
     end
@@ -219,6 +217,8 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             else
                 app.flippedMask = 0;
             end
+            
+            manualThresholding(app,app.displayedImageIndex,app.Slider.Value);
             updateDisplayedImages(app); % update the displayed images
 
         end
@@ -285,7 +285,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
             % Create UITable
             app.UITable = uitable(app.UIFigure);
-            app.UITable.ColumnName = {'Image #'; 'Image Year'; 'Size(x;y;dimensions)'};
+            app.UITable.ColumnName = {'Name'; 'Year'; 'Size'};
             app.UITable.RowName = {};
             app.UITable.ColumnSortable = [true true true true];
             app.UITable.ColumnEditable = [false true false false];

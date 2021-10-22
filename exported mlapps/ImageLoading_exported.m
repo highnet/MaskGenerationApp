@@ -17,6 +17,7 @@ classdef ImageLoading_exported < matlab.apps.AppBase
         ProjectMetadataLabel      matlab.ui.control.Label
         UITable                   matlab.ui.control.Table
         PictureMetadataLabel      matlab.ui.control.Label
+        RemoveImageButton         matlab.ui.control.Button
     end
 
     
@@ -51,7 +52,7 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             [height, width, dim] = size(image); % get image properties
             app.imagesCount = app.imagesCount + 1;
             app.images{1,app.imagesCount} = image;
-            app.UITable.Data = [app.UITable.Data ; [app.imagesCount,num2str(1989+app.imagesCount),strcat(num2str(height),"x", num2str(width), "x",num2str(dim))]]; % add data of the new image to the data table
+            app.UITable.Data = [app.UITable.Data ; [file,num2str(1989+app.imagesCount),strcat(num2str(height),"x", num2str(width), "x",num2str(dim))]]; % add data of the new image to the data table
         end
     end
 
@@ -88,6 +89,16 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             end
             MaskGeneration(app.locLabel.Text,app.pixsizLabel.Text,app.metLabel.Text,app.UITable.Data,app.images,app.imagesCount); % open a MaskGeneration window with the parameters
             app.delete; % close this window
+        end
+
+        % Button pushed function: RemoveImageButton
+        function RemoveImageButtonPushed(app, event)
+            if(isempty(app.UITable.Data))
+                return;
+            end
+            app.UITable.Data(app.displayedImageIndex,:) = []; % delete the row
+            app.images(app.displayedImageIndex) = [];
+            app.imagesCount = app.imagesCount - 1;
         end
     end
 
@@ -167,7 +178,7 @@ classdef ImageLoading_exported < matlab.apps.AppBase
 
             % Create UITable
             app.UITable = uitable(app.UIFigure);
-            app.UITable.ColumnName = {'Image #'; 'Image Year'; 'Size(x;y;dimensions)'};
+            app.UITable.ColumnName = {'Name'; 'Year'; 'Size'};
             app.UITable.RowName = {};
             app.UITable.ColumnSortable = [true true true true];
             app.UITable.ColumnEditable = [false true false false];
@@ -178,6 +189,12 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             app.PictureMetadataLabel = uilabel(app.UIFigure);
             app.PictureMetadataLabel.Position = [72 230 96 22];
             app.PictureMetadataLabel.Text = 'Picture Metadata';
+
+            % Create RemoveImageButton
+            app.RemoveImageButton = uibutton(app.UIFigure, 'push');
+            app.RemoveImageButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveImageButtonPushed, true);
+            app.RemoveImageButton.Position = [392 17 100 22];
+            app.RemoveImageButton.Text = 'Remove Image';
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';

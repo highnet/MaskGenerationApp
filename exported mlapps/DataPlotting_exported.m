@@ -73,7 +73,7 @@ classdef DataPlotting_exported < matlab.apps.AppBase
 
             % Create UITable
             app.UITable = uitable(app.UIFigure);
-            app.UITable.ColumnName = {'Image #'; 'Image Year'; 'Size(x;y;dimensions)'};
+            app.UITable.ColumnName = {'Name'; 'Year'; 'Size'};
             app.UITable.RowName = {};
             app.UITable.Position = [41 46 561 159];
 

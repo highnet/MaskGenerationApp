@@ -227,7 +227,7 @@ classdef ImageCropper_exported < matlab.apps.AppBase
 
             % Create UITable
             app.UITable = uitable(app.UIFigure);
-            app.UITable.ColumnName = {'Image #'; 'Dimensions'};
+            app.UITable.ColumnName = {'Name'; 'Size'};
             app.UITable.RowName = {};
             app.UITable.ColumnSortable = [true true];
             app.UITable.ColumnEditable = [false false];
