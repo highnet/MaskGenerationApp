@@ -82,6 +82,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
 
             % Create EdgeDetectionButton
             app.EdgeDetectionButton = uiradiobutton(app.ChoseyourmethodButtonGroup);
+            app.EdgeDetectionButton.Enable = 'off';
             app.EdgeDetectionButton.Text = 'Edge Detection';
             app.EdgeDetectionButton.Position = [11 -1 104 22];
 
@@ -109,8 +110,9 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
 
             % Create ConnectedComponentLabelingCheckBox
             app.ConnectedComponentLabelingCheckBox = uicheckbox(app.UIFigure);
+            app.ConnectedComponentLabelingCheckBox.Enable = 'off';
             app.ConnectedComponentLabelingCheckBox.Text = 'Connected Component Labeling';
-            app.ConnectedComponentLabelingCheckBox.Position = [29 42 195 22];
+            app.ConnectedComponentLabelingCheckBox.Position = [25 57 195 22];
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';

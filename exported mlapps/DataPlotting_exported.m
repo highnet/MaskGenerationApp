@@ -38,8 +38,6 @@ classdef DataPlotting_exported < matlab.apps.AppBase
 
         % Button pushed function: PlotDataButton
         function PlotDataButtonPushed(app, event)
-            disp(app.imagesCount);
-            
             x = [];
             y = [];
             for (i = 1:app.imagesCount)

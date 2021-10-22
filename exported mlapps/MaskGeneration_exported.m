@@ -2,31 +2,29 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
     % Properties that correspond to app components
     properties (Access = public)
-        UIFigure                  matlab.ui.Figure
-        FileMenu                  matlab.ui.container.Menu
-        CompositeImageLabel       matlab.ui.control.Label
-        MaskedImageLabel          matlab.ui.control.Label
-        OriginalImageLabel        matlab.ui.control.Label
-        Image3                    matlab.ui.control.Image
-        Image2                    matlab.ui.control.Image
-        SaveMaskButton            matlab.ui.control.Button
-        UITable                   matlab.ui.control.Table
-        NextStepButton            matlab.ui.control.Button
-        PrevButton                matlab.ui.control.Button
-        NextButton                matlab.ui.control.Button
-        ImageCounter              matlab.ui.control.Label
-        Image                     matlab.ui.control.Image
-        Step3GenerateMasksLabel   matlab.ui.control.Label
-        Panel                     matlab.ui.container.Panel
-        ManualThresholdLabel      matlab.ui.control.Label
-        Slider                    matlab.ui.control.Slider
-        FlipMaskButton            matlab.ui.control.Button
-        Panel_2                   matlab.ui.container.Panel
-        OtsusThresholdLabel       matlab.ui.control.Label
-        CalculatedThresholdLabel  matlab.ui.control.Label
-        Panel_3                   matlab.ui.container.Panel
-        RegionGrowingLabel        matlab.ui.control.Label
-        GrowNewRegionButton       matlab.ui.control.Button
+        UIFigure                 matlab.ui.Figure
+        FileMenu                 matlab.ui.container.Menu
+        CompositeImageLabel      matlab.ui.control.Label
+        MaskedImageLabel         matlab.ui.control.Label
+        OriginalImageLabel       matlab.ui.control.Label
+        Image3                   matlab.ui.control.Image
+        Image2                   matlab.ui.control.Image
+        SaveMaskButton           matlab.ui.control.Button
+        UITable                  matlab.ui.control.Table
+        NextStepButton           matlab.ui.control.Button
+        PrevButton               matlab.ui.control.Button
+        NextButton               matlab.ui.control.Button
+        ImageCounterLabel        matlab.ui.control.Label
+        Image                    matlab.ui.control.Image
+        Step3GenerateMasksLabel  matlab.ui.control.Label
+        Panel                    matlab.ui.container.Panel
+        ManualThresholdLabel     matlab.ui.control.Label
+        Slider                   matlab.ui.control.Slider
+        FlipMaskButton           matlab.ui.control.Button
+        Panel_2                  matlab.ui.container.Panel
+        Panel_3                  matlab.ui.container.Panel
+        RegionGrowingLabel       matlab.ui.control.Label
+        GrowNewRegionButton      matlab.ui.control.Button
     end
 
     
@@ -48,103 +46,109 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
     
     methods (Access = private)
         
-        function updateDisplayedImages(app) % updates the displayed images
+        function manualThresholding(app,imageIndex,threshold)
+            
+            temp_OriginalImage = app.images{1,imageIndex}; % load the original image from the data table
+            temp_maskedImage = rgb2gray(temp_OriginalImage) >= threshold; % compute a binary mask (>=)
+            
+            if app.flippedMask == 1
+                temp_maskedImage = ~temp_maskedImage;
+            end
+            
+            app.masks{imageIndex} = temp_maskedImage; % we save the mask on the masks cell
+        end
+        
+        function otsu(app,imageIndex)
+            
+            temp_OriginalImage = app.images{1,imageIndex}; % load the original image from the data table
+            temp_MaskedImage = rgb2gray(temp_OriginalImage); % compute a binary mask (>=)
+            
+            top = 256;
+            maximumInterClassVariance = 0.0;
+            
+            for i = 1:top
+                foreGroundPixels = temp_MaskedImage >= i;
+                backGroundPixels = ~foreGroundPixels;
+                
+                numberOfPixelsInForeground = sum(foreGroundPixels(:) == 1);
+                meanIntensityOfForeground = mean(temp_MaskedImage(temp_MaskedImage >= i));
+                
+                numberOfPixelsInBackground = sum(backGroundPixels(:) == 1);
+                meanIntensityOfBackground = mean(temp_MaskedImage(temp_MaskedImage < i));
+                
+                interClassVariance = numberOfPixelsInBackground * numberOfPixelsInForeground * (meanIntensityOfBackground - meanIntensityOfForeground)^2;
+                
+                if (interClassVariance >= maximumInterClassVariance)
+                    level = i;
+                    maximumInterClassVariance = interClassVariance;
+                end
+            end
+            
+            temp_MaskedImage = rgb2gray(temp_OriginalImage) <= level; % compute a binary mask
+            app.masks{imageIndex} = temp_MaskedImage; % we save the mask on the masks cell
+            
+        end
 
-            app.originalImage = app.images{1,app.displayedImageIndex}; % load the original image from the data table
-
-            % Do manual thresholding
+        function connectedComponentLabeling(app)
+            
+        end
+        
+        function edgeDetection(app)
+            
+        end
+        
+        function regionGrowing(app,imageIndex)
+            
+            % temp_OriginalImage = app.images{1,imageIndex}; % load the original image from the data table
+            temp_MaskedImage = app.masks{1,imageIndex}; % compute a binary mask (>=)
+            
+            imshow(app.combinedImage); % show the combined image
+            % try seed = ginput(1) % get the location of one mouse click
+            try ginput(1) % wait for one mouse click
+            catch
+            end
+            
+            temp_MaskedImage = imnoise(temp_MaskedImage,'salt & pepper',0.1); % write some random data into the mask purely for testing purposes
+            app.masks{imageIndex} = temp_MaskedImage; % save the mask so we can keep adding information to it
+            
+        end
+        
+        function morphologicalOperation(app)
+            
+        end
+        
+        function generateDefaultMasks(app)
+            % generate a default mask for each image
+            
             if app.method == "Manual Thresholding"
-                    app.maskedImage = rgb2gray(app.originalImage); % convert the original image to grayscale as a mask starting point
-                    if app.flippedMask == 0
-                        app.maskedImage = rgb2gray(app.originalImage) >= app.Slider.Value; % compute a binary mask (>=)
-                    else
-                        app.maskedImage = rgb2gray(app.originalImage) <= app.Slider.Value; % compute a binary mask (<=)
-                    end
-                    app.masks{app.displayedImageIndex} = app.maskedImage; % we save the mask on the masks cell
-
-            end
-
-            
-            % Do Otsu's Thresholding
-            if app.method == "Otsu's Thresholding" % check if we are on the otsu's thresholding mode
-                if(isempty(app.masks{app.displayedImageIndex}))
-                    app.maskedImage = rgb2gray(app.originalImage); % convert the original image to grayscale as a mask starting point
-                    level = otsu(app);
-                    app.CalculatedThresholdLabel.Text = strcat("Calculated Threshold = ",num2str(level));
-                    app.masks{app.displayedImageIndex} = app.maskedImage; % we save the mask on the masks cell
-                else
-                    app.maskedImage = app.masks{app.displayedImageIndex}; % Load a mask from the masks cell if it already exists
+                for (i = 1:app.imagesCount)
+                    manualThresholding(app,i,app.Slider.Value);
+                end
+            elseif app.method == "Otsu's Thresholding" % check if we are on the otsu's thresholding mode
+                for (i = 1:app.imagesCount)
+                    otsu(app,i);
+                end
+            elseif app.method == "Region Growing"
+                for (i = 1:app.imagesCount)
+                    temp_OriginalImage = app.images{1,i}; % load the original image from the data table
+                    temp_maskedImage = rgb2gray(temp_OriginalImage); % compute a binary mask (>=)
+                    temp_maskedImage(:) = 0; % set the masking start point to a black image of the same size as the orignal image
+                    app.masks{i} = temp_maskedImage; % we save the mask on the masks cell
                 end
             end
+        end
+        
+        function updateDisplayedImages(app) % updates the displayed images
             
-            if app.method == "Region Growing" % check if we are on the region growing mode
-                if(isempty(app.masks{app.displayedImageIndex}))
-                   app.maskedImage = rgb2gray(app.originalImage); % convert the original image to grayscale as a mask starting point
-                   app.maskedImage(:) = 0; % set the masking start point to a black image of the same size as the orignal image
-                else
-                    app.maskedImage = app.masks{app.displayedImageIndex}; % Load a mask from the masks cell if it already exists
-                end
-            
-            end
-           
-            
-            app.ImageCounter.Text = strcat("Image ", num2str(app.displayedImageIndex), " of ", num2str(app.imagesCount)); % set the displayed image text
+            app.originalImage = app.images{1,app.displayedImageIndex}; % load the original image from the data table
+            app.maskedImage = app.masks{app.displayedImageIndex}; % Load a mask from the masks cell if it already exists
+            app.ImageCounterLabel.Text = strcat("Image ", num2str(app.displayedImageIndex), " of ", num2str(app.imagesCount)); % set the displayed image text
             app.Image.ImageSource = app.originalImage; % set the imagesource1 to the original image
             app.Image2.ImageSource = im2uint8(cat(3,app.maskedImage,app.maskedImage,app.maskedImage)); % set the imagesource2 to the masked image (the grayscale mask has to be temporarily converted to a RGB image in order to be displayed in the image component)
             app.combinedImage = im2uint8(cat(3,app.maskedImage,app.maskedImage,app.maskedImage)) + app.originalImage; % create a composite image of the original image plus the image's mask
             app.Image3.ImageSource = app.combinedImage; % set the imagesource3 to the combined image
         end
         
-        function level = otsu(app)
-            top = 256;            
-            maximumInterClassVariance = 0.0;
-            
-            for (i = 1:top)
-                foreGroundPixels = app.maskedImage >= i;
-                backGroundPixels = ~foreGroundPixels;
-                
-                numberOfPixelsInForeground = sum(foreGroundPixels(:) == 1);
-                meanIntensityOfForeground = mean(app.maskedImage(app.maskedImage >= i));
-
-                numberOfPixelsInBackground = sum(backGroundPixels(:) == 1);
-                meanIntensityOfBackground = mean(app.maskedImage(app.maskedImage < i));
-                    
-               interClassVariance = numberOfPixelsInBackground * numberOfPixelsInForeground * (meanIntensityOfBackground - meanIntensityOfForeground)^2;
-                    
-               if (interClassVariance >= maximumInterClassVariance)
-                    level = i;
-                    maximumInterClassVariance = interClassVariance;
-               end
-            end 
-            
-             app.maskedImage = rgb2gray(app.originalImage) <= level; % compute a binary mask (>=)
-
-        end
-        
-        
-        function manualThresholding(app)
-            
-        end
-        
-        function results = connectedComponentLabeling(app)
-            
-        end
-        
-        function results = edgeDetection(app)
-            
-        end
-        
-        function results = regionGrowing(app)
-            
-        end
-        
-        function results = noiseRemoval(app)
-            
-        end
-        
-        function generateDefaultMasks(app)
-            % generate a default mask for each image
-        end
     end
     
 
@@ -167,6 +171,8 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
                 app.Panel_3.Visible = true;
             end
             app.masks = cell(1,imagesCount); % create a new storage matrix for all masks of all pictures, this is initially empty.
+            
+            generateDefaultMasks(app);
             updateDisplayedImages(app); % update the displayed images
             
         end
@@ -202,7 +208,8 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
         % Value changed function: Slider
         function SliderValueChanged(app, event)
-           updateDisplayedImages(app); % update the displyed images (with a new manual thresholding slider value)
+            manualThresholding(app,app.displayedImageIndex,app.Slider.Value);
+            updateDisplayedImages(app); % update the displyed images (with a new manual thresholding slider value)
         end
 
         % Button pushed function: FlipMaskButton
@@ -219,14 +226,8 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
         % Button pushed function: GrowNewRegionButton
         function GrowNewRegionButtonPushed(app, event)
             % Do region growing
-
-            imshow(app.combinedImage); % show the combined image
-            try ginput(1) % get the location of one mouse click
-            catch 
-            end
-            
-           app.maskedImage = imnoise(app.maskedImage,'salt & pepper',0.1); % write some random data into the mask purely for testing purposes
-           app.masks{app.displayedImageIndex} = app.maskedImage; % save the mask so we can keep adding information to it
+           
+           regionGrowing(app,app.displayedImageIndex);
            app.updateDisplayedImages(); % update the displayed images
         end
 
@@ -308,11 +309,11 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             app.NextButton.Position = [489 53 100 22];
             app.NextButton.Text = 'Next ->';
 
-            % Create ImageCounter
-            app.ImageCounter = uilabel(app.UIFigure);
-            app.ImageCounter.FontSize = 30;
-            app.ImageCounter.Position = [391 597 206 36];
-            app.ImageCounter.Text = 'Image 0 of 0';
+            % Create ImageCounterLabel
+            app.ImageCounterLabel = uilabel(app.UIFigure);
+            app.ImageCounterLabel.FontSize = 30;
+            app.ImageCounterLabel.Position = [391 597 206 36];
+            app.ImageCounterLabel.Text = 'Image 0 of 0';
 
             % Create Image
             app.Image = uiimage(app.UIFigure);
@@ -351,17 +352,6 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             app.Panel_2 = uipanel(app.UIFigure);
             app.Panel_2.Visible = 'off';
             app.Panel_2.Position = [4 468 172 84];
-
-            % Create OtsusThresholdLabel
-            app.OtsusThresholdLabel = uilabel(app.Panel_2);
-            app.OtsusThresholdLabel.FontWeight = 'bold';
-            app.OtsusThresholdLabel.Position = [28 54 104 22];
-            app.OtsusThresholdLabel.Text = 'Otsu''s Threshold';
-
-            % Create CalculatedThresholdLabel
-            app.CalculatedThresholdLabel = uilabel(app.Panel_2);
-            app.CalculatedThresholdLabel.Position = [0 31 272 22];
-            app.CalculatedThresholdLabel.Text = 'Calculated Threshold = ';
 
             % Create Panel_3
             app.Panel_3 = uipanel(app.UIFigure);

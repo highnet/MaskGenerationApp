@@ -66,7 +66,7 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             app.locLabel.Text = location; %  set the location label
             app.pixsizLabel.Text = pixelSize; % set the pixel size labe
             app.metLabel.Text = method; % set the method label
-            app.images = cell(1,100);
+            app.images = cell(1,1024);
         end
 
         % Button pushed function: LoadPNGButton
