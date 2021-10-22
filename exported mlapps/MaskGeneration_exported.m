@@ -4,27 +4,29 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
     properties (Access = public)
         UIFigure                  matlab.ui.Figure
         FileMenu                  matlab.ui.container.Menu
-        Panel_3                   matlab.ui.container.Panel
-        RegionGrowingLabel        matlab.ui.control.Label
-        GrowNewRegionButton       matlab.ui.control.Button
-        Panel_2                   matlab.ui.container.Panel
-        OtsusThresholdLabel       matlab.ui.control.Label
-        CalculatedThresholdLabel  matlab.ui.control.Label
+        CompositeImageLabel       matlab.ui.control.Label
+        MaskedImageLabel          matlab.ui.control.Label
+        OriginalImageLabel        matlab.ui.control.Label
+        Image3                    matlab.ui.control.Image
+        Image2                    matlab.ui.control.Image
+        SaveMaskButton            matlab.ui.control.Button
+        UITable                   matlab.ui.control.Table
+        NextStepButton            matlab.ui.control.Button
+        PrevButton                matlab.ui.control.Button
+        NextButton                matlab.ui.control.Button
+        ImageCounter              matlab.ui.control.Label
+        Image                     matlab.ui.control.Image
+        Step3GenerateMasksLabel   matlab.ui.control.Label
         Panel                     matlab.ui.container.Panel
         ManualThresholdLabel      matlab.ui.control.Label
         Slider                    matlab.ui.control.Slider
         FlipMaskButton            matlab.ui.control.Button
-        Step3GenerateMasksLabel   matlab.ui.control.Label
-        Image                     matlab.ui.control.Image
-        ImageCounter              matlab.ui.control.Label
-        NextButton                matlab.ui.control.Button
-        PrevButton                matlab.ui.control.Button
-        ResetMaskButton           matlab.ui.control.Button
-        NextStepButton            matlab.ui.control.Button
-        UITable                   matlab.ui.control.Table
-        SaveMaskButton            matlab.ui.control.Button
-        Image2                    matlab.ui.control.Image
-        Image3                    matlab.ui.control.Image
+        Panel_2                   matlab.ui.container.Panel
+        OtsusThresholdLabel       matlab.ui.control.Label
+        CalculatedThresholdLabel  matlab.ui.control.Label
+        Panel_3                   matlab.ui.container.Panel
+        RegionGrowingLabel        matlab.ui.control.Label
+        GrowNewRegionButton       matlab.ui.control.Button
     end
 
     
@@ -119,6 +121,11 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
         end
         
+        
+        function manualThresholding(app)
+            
+        end
+        
         function results = connectedComponentLabeling(app)
             
         end
@@ -134,6 +141,10 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
         function results = noiseRemoval(app)
             
         end
+        
+        function generateDefaultMasks(app)
+            % generate a default mask for each image
+        end
     end
     
 
@@ -145,7 +156,6 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             app.location = location; % store the location value
             app.pixelSize = pixelSize; % store the pixel size value
             app.method = method; % store the method value
-            app.imageData = imageData; % store the image data value (the image data is the entire table from the previous ImageLoading window)
             app.images = images;
             app.imagesCount = imagesCount;
             app.UITable.Data = imageData; % copy the imagedata into a new table
@@ -175,7 +185,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
         % Button pushed function: NextButton
         function NextButtonPushed(app, event)
-            if app.displayedImageIndex < size(app.imageData,1) % if there is a next row in the table
+            if app.displayedImageIndex < size(app.UITable.Data,1) % if there is a next row in the table
                 app.displayedImageIndex = app.displayedImageIndex + 1; % increase the index of the displayed row
                 updateDisplayedImages(app); % update the displayed images
             end
@@ -222,7 +232,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
         % Button pushed function: NextStepButton
         function NextStepButtonPushed(app, event)
-            DataPlotting(app.location,app.pixelSize,app.method,app.imageData,app.images,app.imagesCount,app.masks);
+            DataPlotting(app.location,app.pixelSize,app.method,app.UITable.Data,app.images,app.imagesCount,app.masks);
             app.delete;
         end
     end
@@ -235,7 +245,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
             % Create UIFigure and hide until all components are created
             app.UIFigure = uifigure('Visible', 'off');
-            app.UIFigure.Position = [100 100 720 698];
+            app.UIFigure.Position = [100 100 952 653];
             app.UIFigure.Name = 'MATLAB App';
 
             % Create FileMenu
@@ -243,43 +253,80 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             app.FileMenu.Enable = 'off';
             app.FileMenu.Text = 'File';
 
-            % Create Panel_3
-            app.Panel_3 = uipanel(app.UIFigure);
-            app.Panel_3.Visible = 'off';
-            app.Panel_3.Position = [4 511 172 84];
+            % Create CompositeImageLabel
+            app.CompositeImageLabel = uilabel(app.UIFigure);
+            app.CompositeImageLabel.Position = [427 576 100 22];
+            app.CompositeImageLabel.Text = 'Composite Image';
 
-            % Create RegionGrowingLabel
-            app.RegionGrowingLabel = uilabel(app.Panel_3);
-            app.RegionGrowingLabel.FontWeight = 'bold';
-            app.RegionGrowingLabel.Position = [36 61 98 22];
-            app.RegionGrowingLabel.Text = 'Region Growing';
+            % Create MaskedImageLabel
+            app.MaskedImageLabel = uilabel(app.UIFigure);
+            app.MaskedImageLabel.Position = [114 395 84 22];
+            app.MaskedImageLabel.Text = 'Masked Image';
 
-            % Create GrowNewRegionButton
-            app.GrowNewRegionButton = uibutton(app.Panel_3, 'push');
-            app.GrowNewRegionButton.ButtonPushedFcn = createCallbackFcn(app, @GrowNewRegionButtonPushed, true);
-            app.GrowNewRegionButton.Position = [26 37 113 22];
-            app.GrowNewRegionButton.Text = 'Grow New Region';
+            % Create OriginalImageLabel
+            app.OriginalImageLabel = uilabel(app.UIFigure);
+            app.OriginalImageLabel.Position = [114 236 84 22];
+            app.OriginalImageLabel.Text = 'Original Image';
 
-            % Create Panel_2
-            app.Panel_2 = uipanel(app.UIFigure);
-            app.Panel_2.Visible = 'off';
-            app.Panel_2.Position = [4 419 172 84];
+            % Create Image3
+            app.Image3 = uiimage(app.UIFigure);
+            app.Image3.Position = [235 92 484 489];
 
-            % Create OtsusThresholdLabel
-            app.OtsusThresholdLabel = uilabel(app.Panel_2);
-            app.OtsusThresholdLabel.FontWeight = 'bold';
-            app.OtsusThresholdLabel.Position = [28 54 104 22];
-            app.OtsusThresholdLabel.Text = 'Otsu''s Threshold';
+            % Create Image2
+            app.Image2 = uiimage(app.UIFigure);
+            app.Image2.Position = [83 261 140 135];
 
-            % Create CalculatedThresholdLabel
-            app.CalculatedThresholdLabel = uilabel(app.Panel_2);
-            app.CalculatedThresholdLabel.Position = [0 31 272 22];
-            app.CalculatedThresholdLabel.Text = 'Calculated Threshold = ';
+            % Create SaveMaskButton
+            app.SaveMaskButton = uibutton(app.UIFigure, 'push');
+            app.SaveMaskButton.ButtonPushedFcn = createCallbackFcn(app, @SaveMaskButtonPushed, true);
+            app.SaveMaskButton.Position = [434 17 100 22];
+            app.SaveMaskButton.Text = 'Save Mask';
+
+            % Create UITable
+            app.UITable = uitable(app.UIFigure);
+            app.UITable.ColumnName = {'Image #'; 'Image Year'; 'Size(x;y;dimensions)'};
+            app.UITable.RowName = {};
+            app.UITable.ColumnSortable = [true true true true];
+            app.UITable.ColumnEditable = [false true false false];
+            app.UITable.Position = [728 38 209 581];
+
+            % Create NextStepButton
+            app.NextStepButton = uibutton(app.UIFigure, 'push');
+            app.NextStepButton.ButtonPushedFcn = createCallbackFcn(app, @NextStepButtonPushed, true);
+            app.NextStepButton.Position = [827 9 100 22];
+            app.NextStepButton.Text = 'Next Step';
+
+            % Create PrevButton
+            app.PrevButton = uibutton(app.UIFigure, 'push');
+            app.PrevButton.ButtonPushedFcn = createCallbackFcn(app, @PrevButtonPushed, true);
+            app.PrevButton.Position = [375 53 100 22];
+            app.PrevButton.Text = '<- Prev';
+
+            % Create NextButton
+            app.NextButton = uibutton(app.UIFigure, 'push');
+            app.NextButton.ButtonPushedFcn = createCallbackFcn(app, @NextButtonPushed, true);
+            app.NextButton.Position = [489 53 100 22];
+            app.NextButton.Text = 'Next ->';
+
+            % Create ImageCounter
+            app.ImageCounter = uilabel(app.UIFigure);
+            app.ImageCounter.FontSize = 30;
+            app.ImageCounter.Position = [391 597 206 36];
+            app.ImageCounter.Text = 'Image 0 of 0';
+
+            % Create Image
+            app.Image = uiimage(app.UIFigure);
+            app.Image.Position = [88 102 135 135];
+
+            % Create Step3GenerateMasksLabel
+            app.Step3GenerateMasksLabel = uilabel(app.UIFigure);
+            app.Step3GenerateMasksLabel.Position = [4 632 135 22];
+            app.Step3GenerateMasksLabel.Text = 'Step 3: Generate Masks';
 
             % Create Panel
             app.Panel = uipanel(app.UIFigure);
             app.Panel.Visible = 'off';
-            app.Panel.Position = [4 279 172 125];
+            app.Panel.Position = [4 420 172 125];
 
             % Create ManualThresholdLabel
             app.ManualThresholdLabel = uilabel(app.Panel);
@@ -300,66 +347,38 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             app.FlipMaskButton.Position = [39 20 100 22];
             app.FlipMaskButton.Text = 'Flip Mask';
 
-            % Create Step3GenerateMasksLabel
-            app.Step3GenerateMasksLabel = uilabel(app.UIFigure);
-            app.Step3GenerateMasksLabel.Position = [4 677 135 22];
-            app.Step3GenerateMasksLabel.Text = 'Step 3: Generate Masks';
+            % Create Panel_2
+            app.Panel_2 = uipanel(app.UIFigure);
+            app.Panel_2.Visible = 'off';
+            app.Panel_2.Position = [4 468 172 84];
 
-            % Create Image
-            app.Image = uiimage(app.UIFigure);
-            app.Image.Position = [188 372 88 81];
+            % Create OtsusThresholdLabel
+            app.OtsusThresholdLabel = uilabel(app.Panel_2);
+            app.OtsusThresholdLabel.FontWeight = 'bold';
+            app.OtsusThresholdLabel.Position = [28 54 104 22];
+            app.OtsusThresholdLabel.Text = 'Otsu''s Threshold';
 
-            % Create ImageCounter
-            app.ImageCounter = uilabel(app.UIFigure);
-            app.ImageCounter.FontSize = 30;
-            app.ImageCounter.Position = [247 606 172 36];
-            app.ImageCounter.Text = 'Image 0 of 0';
+            % Create CalculatedThresholdLabel
+            app.CalculatedThresholdLabel = uilabel(app.Panel_2);
+            app.CalculatedThresholdLabel.Position = [0 31 272 22];
+            app.CalculatedThresholdLabel.Text = 'Calculated Threshold = ';
 
-            % Create NextButton
-            app.NextButton = uibutton(app.UIFigure, 'push');
-            app.NextButton.ButtonPushedFcn = createCallbackFcn(app, @NextButtonPushed, true);
-            app.NextButton.Position = [302 315 100 22];
-            app.NextButton.Text = 'Next ->';
+            % Create Panel_3
+            app.Panel_3 = uipanel(app.UIFigure);
+            app.Panel_3.Visible = 'off';
+            app.Panel_3.Position = [4 466 172 84];
 
-            % Create PrevButton
-            app.PrevButton = uibutton(app.UIFigure, 'push');
-            app.PrevButton.ButtonPushedFcn = createCallbackFcn(app, @PrevButtonPushed, true);
-            app.PrevButton.Position = [188 315 100 22];
-            app.PrevButton.Text = '<- Prev';
+            % Create RegionGrowingLabel
+            app.RegionGrowingLabel = uilabel(app.Panel_3);
+            app.RegionGrowingLabel.FontWeight = 'bold';
+            app.RegionGrowingLabel.Position = [36 61 98 22];
+            app.RegionGrowingLabel.Text = 'Region Growing';
 
-            % Create ResetMaskButton
-            app.ResetMaskButton = uibutton(app.UIFigure, 'push');
-            app.ResetMaskButton.Enable = 'off';
-            app.ResetMaskButton.Position = [247 237 100 22];
-            app.ResetMaskButton.Text = 'Reset Mask';
-
-            % Create NextStepButton
-            app.NextStepButton = uibutton(app.UIFigure, 'push');
-            app.NextStepButton.ButtonPushedFcn = createCallbackFcn(app, @NextStepButtonPushed, true);
-            app.NextStepButton.Position = [610 226 100 22];
-            app.NextStepButton.Text = 'Next Step';
-
-            % Create UITable
-            app.UITable = uitable(app.UIFigure);
-            app.UITable.ColumnName = {'Image #'; 'Image Year'; 'Size(x;y;dimensions)'};
-            app.UITable.RowName = {};
-            app.UITable.ColumnSortable = [true true true true];
-            app.UITable.ColumnEditable = [false true false false];
-            app.UITable.Position = [21 30 679 179];
-
-            % Create SaveMaskButton
-            app.SaveMaskButton = uibutton(app.UIFigure, 'push');
-            app.SaveMaskButton.ButtonPushedFcn = createCallbackFcn(app, @SaveMaskButtonPushed, true);
-            app.SaveMaskButton.Position = [247 279 100 22];
-            app.SaveMaskButton.Text = 'Save Mask';
-
-            % Create Image2
-            app.Image2 = uiimage(app.UIFigure);
-            app.Image2.Position = [188 457 88 81];
-
-            % Create Image3
-            app.Image3 = uiimage(app.UIFigure);
-            app.Image3.Position = [287 373 216 214];
+            % Create GrowNewRegionButton
+            app.GrowNewRegionButton = uibutton(app.Panel_3, 'push');
+            app.GrowNewRegionButton.ButtonPushedFcn = createCallbackFcn(app, @GrowNewRegionButtonPushed, true);
+            app.GrowNewRegionButton.Position = [26 37 113 22];
+            app.GrowNewRegionButton.Text = 'Grow New Region';
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';

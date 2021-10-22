@@ -51,7 +51,7 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             [height, width, dim] = size(image); % get image properties
             app.imagesCount = app.imagesCount + 1;
             app.images{1,app.imagesCount} = image;
-            app.UITable.Data = [app.UITable.Data ; [app.imagesCount,"1990",strcat(num2str(height),"x", num2str(width), "x",num2str(dim))]]; % add data of the new image to the data table
+            app.UITable.Data = [app.UITable.Data ; [app.imagesCount,num2str(1989+app.imagesCount),strcat(num2str(height),"x", num2str(width), "x",num2str(dim))]]; % add data of the new image to the data table
         end
     end
 

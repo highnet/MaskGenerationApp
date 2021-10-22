@@ -15,7 +15,6 @@ classdef DataPlotting_exported < matlab.apps.AppBase
         location;
         pixelSize;
         method;
-        imageData;
         images;
         imagesCount;
         masks;
@@ -30,7 +29,6 @@ classdef DataPlotting_exported < matlab.apps.AppBase
             app.location = location;
             app.pixelSize = pixelSize;
             app.method = method;
-            app.imageData = imageData;
             app.images = images;
             app.imagesCount = imagesCount;
             app.masks = masks;
@@ -51,17 +49,11 @@ classdef DataPlotting_exported < matlab.apps.AppBase
                 x = [x str2num(app.UITable.Data(i,2))];
             end
             
-            disp(x);
-            disp(y);
-            
-            figure;
-            plot(x,y);
-            title(app.location);
-            subtitle(app.method);
-            xlabel("Year");
-            ylabel("Pixel Count");
-            
             plot(app.UIAxes,x,y);
+            app.UIAxes.Title.String =  app.location;
+            app.UIAxes.Subtitle.String = app.method;
+            app.UIAxes.XLabel.String = "Year";
+            app.UIAxes.YLabel.String = "Pixel Count";
         end
     end
 

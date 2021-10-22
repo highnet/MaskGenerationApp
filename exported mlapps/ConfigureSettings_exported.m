@@ -2,19 +2,19 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
 
     % Properties that correspond to app components
     properties (Access = public)
-        UIFigure                      matlab.ui.Figure
-        FileMenu                      matlab.ui.container.Menu
-        Step1bConfigureSettingsLabel  matlab.ui.control.Label
-        NextStepButton                matlab.ui.control.Button
-        ChoseyourmethodButtonGroup    matlab.ui.container.ButtonGroup
-        ManualThresholdingButton      matlab.ui.control.RadioButton
-        OtsusThresholdingButton       matlab.ui.control.RadioButton
-        RegionGrowingButton           matlab.ui.control.RadioButton
-        EdgeDetectionButton           matlab.ui.control.RadioButton
-        LocationEditFieldLabel        matlab.ui.control.Label
-        LocationEditField             matlab.ui.control.EditField
-        PixelSizeEditFieldLabel       matlab.ui.control.Label
-        PixelSizeEditField            matlab.ui.control.EditField
+        UIFigure                    matlab.ui.Figure
+        FileMenu                    matlab.ui.container.Menu
+        WelcomeLabel                matlab.ui.control.Label
+        NextStepButton              matlab.ui.control.Button
+        ChoseyourmethodButtonGroup  matlab.ui.container.ButtonGroup
+        ManualThresholdingButton    matlab.ui.control.RadioButton
+        OtsusThresholdingButton     matlab.ui.control.RadioButton
+        RegionGrowingButton         matlab.ui.control.RadioButton
+        EdgeDetectionButton         matlab.ui.control.RadioButton
+        LocationEditFieldLabel      matlab.ui.control.Label
+        LocationEditField           matlab.ui.control.EditField
+        PixelSizeEditFieldLabel     matlab.ui.control.Label
+        PixelSizeEditField          matlab.ui.control.EditField
         ConnectedComponentLabelingCheckBox  matlab.ui.control.CheckBox
     end
 
@@ -47,10 +47,10 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.FileMenu.Enable = 'off';
             app.FileMenu.Text = 'File';
 
-            % Create Step1bConfigureSettingsLabel
-            app.Step1bConfigureSettingsLabel = uilabel(app.UIFigure);
-            app.Step1bConfigureSettingsLabel.Position = [4 285 152 22];
-            app.Step1bConfigureSettingsLabel.Text = 'Step 1b: Configure Settings';
+            % Create WelcomeLabel
+            app.WelcomeLabel = uilabel(app.UIFigure);
+            app.WelcomeLabel.Position = [89 274 59 22];
+            app.WelcomeLabel.Text = 'Welcome!';
 
             % Create NextStepButton
             app.NextStepButton = uibutton(app.UIFigure, 'push');
@@ -94,6 +94,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             % Create LocationEditField
             app.LocationEditField = uieditfield(app.UIFigure, 'text');
             app.LocationEditField.Position = [82 238 100 22];
+            app.LocationEditField.Value = 'Testing Location';
 
             % Create PixelSizeEditFieldLabel
             app.PixelSizeEditFieldLabel = uilabel(app.UIFigure);
@@ -104,6 +105,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             % Create PixelSizeEditField
             app.PixelSizeEditField = uieditfield(app.UIFigure, 'text');
             app.PixelSizeEditField.Position = [82 207 100 22];
+            app.PixelSizeEditField.Value = '30';
 
             % Create ConnectedComponentLabelingCheckBox
             app.ConnectedComponentLabelingCheckBox = uicheckbox(app.UIFigure);
