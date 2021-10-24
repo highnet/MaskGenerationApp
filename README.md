@@ -1,5 +1,3 @@
-This is a prototype app and is not reflective of the final product.
-
 Mask Generation App environment for EBDV WS2021 TU Wien
 
 Entry point: HomeScreen.mlapp
