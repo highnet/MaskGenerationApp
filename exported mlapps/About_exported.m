@@ -1,0 +1,77 @@
+classdef About_exported < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure    matlab.ui.Figure
+        Background  matlab.ui.control.Image
+        Label       matlab.ui.control.Label
+        AboutLabel  matlab.ui.control.Label
+        Image       matlab.ui.control.Image
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Position = [100 100 190 218];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create Background
+            app.Background = uiimage(app.UIFigure);
+            app.Background.ScaleMethod = 'fill';
+            app.Background.Position = [1 1 196 218];
+            app.Background.ImageSource = 'bg.PNG';
+
+            % Create Label
+            app.Label = uilabel(app.UIFigure);
+            app.Label.HorizontalAlignment = 'center';
+            app.Label.WordWrap = 'on';
+            app.Label.FontSize = 14;
+            app.Label.Position = [8 5 189 176];
+            app.Label.Text = {'Mask Generation App environment for EDBV WS2021 TU Wien'; ''; 'AC5 Group Members:'; ''; '1. Telleria Joaquin'; '2. Tomanov Svetlin'; '3. Keser Sergej'; '4. Seifried Maximilian Jack'; '5. Payer Maximilian'; ''};
+
+            % Create AboutLabel
+            app.AboutLabel = uilabel(app.UIFigure);
+            app.AboutLabel.FontSize = 30;
+            app.AboutLabel.Position = [56 180 84 36];
+            app.AboutLabel.Text = 'About';
+
+            % Create Image
+            app.Image = uiimage(app.UIFigure);
+            app.Image.Position = [1 180 39 39];
+            app.Image.ImageSource = 'About.PNG';
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = About_exported
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
