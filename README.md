@@ -14,4 +14,8 @@ Group Members:
 4. Seifried Maximilian Jack
 5. Payer Maximilian
 
+DOWNLOADS
+
+Assets: https://drive.google.com/drive/folders/16-BAd01K1n2t4ToDcIpPRmKRzrnXci53?usp=sharing
+
 Images for Testing: https://drive.google.com/file/d/1Gn78E_nreivme6S9gD2cIj_G33isq-Y3/view?usp=sharing

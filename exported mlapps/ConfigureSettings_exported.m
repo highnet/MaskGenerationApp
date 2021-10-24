@@ -4,7 +4,6 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
     properties (Access = public)
         UIFigure                    matlab.ui.Figure
         FileMenu                    matlab.ui.container.Menu
-        WelcomeLabel                matlab.ui.control.Label
         NextStepButton              matlab.ui.control.Button
         ChoseyourmethodButtonGroup  matlab.ui.container.ButtonGroup
         ManualThresholdingButton    matlab.ui.control.RadioButton
@@ -16,6 +15,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
         PixelSizeEditFieldLabel     matlab.ui.control.Label
         PixelSizeEditField          matlab.ui.control.EditField
         ConnectedComponentLabelingCheckBox  matlab.ui.control.CheckBox
+        ConfiguresettingsLabel      matlab.ui.control.Label
     end
 
     % Callbacks that handle component events
@@ -47,16 +47,11 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.FileMenu.Enable = 'off';
             app.FileMenu.Text = 'File';
 
-            % Create WelcomeLabel
-            app.WelcomeLabel = uilabel(app.UIFigure);
-            app.WelcomeLabel.Position = [89 273 59 22];
-            app.WelcomeLabel.Text = 'Welcome!';
-
             % Create NextStepButton
             app.NextStepButton = uibutton(app.UIFigure, 'push');
             app.NextStepButton.ButtonPushedFcn = createCallbackFcn(app, @NextStepButtonPushed, true);
             app.NextStepButton.FontWeight = 'bold';
-            app.NextStepButton.Position = [120 20 100 22];
+            app.NextStepButton.Position = [120 22 100 22];
             app.NextStepButton.Text = 'Next Step';
 
             % Create ChoseyourmethodButtonGroup
@@ -113,6 +108,11 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.ConnectedComponentLabelingCheckBox.Enable = 'off';
             app.ConnectedComponentLabelingCheckBox.Text = 'Connected Component Labeling';
             app.ConnectedComponentLabelingCheckBox.Position = [25 56 195 22];
+
+            % Create ConfiguresettingsLabel
+            app.ConfiguresettingsLabel = uilabel(app.UIFigure);
+            app.ConfiguresettingsLabel.Position = [9 282 106 22];
+            app.ConfiguresettingsLabel.Text = 'Configure settings.';
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
