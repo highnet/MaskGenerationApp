@@ -1,11 +1,6 @@
-This is a prototype app and is not reflective of the final product.
-
 Mask Generation App environment for EBDV WS2021 TU Wien
 
-Entry points are:
-1. ConfigureSettings.mlapp
-2. ImageCropper.mlapp
-3. CaseStudies.mlapp 
+Entry point: HomeScreen.mlapp
 
 Group Members:
 1. Telleria Joaquin
@@ -14,7 +9,7 @@ Group Members:
 4. Seifried Maximilian Jack
 5. Payer Maximilian
 
-DOWNLOADS
+Downloads:
 
 Assets: https://drive.google.com/drive/folders/16-BAd01K1n2t4ToDcIpPRmKRzrnXci53?usp=sharing
 
