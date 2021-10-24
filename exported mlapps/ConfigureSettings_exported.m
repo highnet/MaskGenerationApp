@@ -39,7 +39,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
 
             % Create UIFigure and hide until all components are created
             app.UIFigure = uifigure('Visible', 'off');
-            app.UIFigure.Position = [100 100 235 306];
+            app.UIFigure.Position = [100 100 236 305];
             app.UIFigure.Name = 'MATLAB App';
 
             % Create FileMenu
@@ -49,20 +49,20 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
 
             % Create WelcomeLabel
             app.WelcomeLabel = uilabel(app.UIFigure);
-            app.WelcomeLabel.Position = [89 274 59 22];
+            app.WelcomeLabel.Position = [89 273 59 22];
             app.WelcomeLabel.Text = 'Welcome!';
 
             % Create NextStepButton
             app.NextStepButton = uibutton(app.UIFigure, 'push');
             app.NextStepButton.ButtonPushedFcn = createCallbackFcn(app, @NextStepButtonPushed, true);
             app.NextStepButton.FontWeight = 'bold';
-            app.NextStepButton.Position = [120 21 100 22];
+            app.NextStepButton.Position = [120 20 100 22];
             app.NextStepButton.Text = 'Next Step';
 
             % Create ChoseyourmethodButtonGroup
             app.ChoseyourmethodButtonGroup = uibuttongroup(app.UIFigure);
             app.ChoseyourmethodButtonGroup.Title = 'Chose your method:';
-            app.ChoseyourmethodButtonGroup.Position = [16 89 204 110];
+            app.ChoseyourmethodButtonGroup.Position = [16 88 204 110];
 
             % Create ManualThresholdingButton
             app.ManualThresholdingButton = uiradiobutton(app.ChoseyourmethodButtonGroup);
@@ -89,30 +89,30 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             % Create LocationEditFieldLabel
             app.LocationEditFieldLabel = uilabel(app.UIFigure);
             app.LocationEditFieldLabel.HorizontalAlignment = 'right';
-            app.LocationEditFieldLabel.Position = [16 238 51 22];
+            app.LocationEditFieldLabel.Position = [16 237 51 22];
             app.LocationEditFieldLabel.Text = 'Location';
 
             % Create LocationEditField
             app.LocationEditField = uieditfield(app.UIFigure, 'text');
-            app.LocationEditField.Position = [82 238 100 22];
+            app.LocationEditField.Position = [82 237 100 22];
             app.LocationEditField.Value = 'Testing Location';
 
             % Create PixelSizeEditFieldLabel
             app.PixelSizeEditFieldLabel = uilabel(app.UIFigure);
             app.PixelSizeEditFieldLabel.HorizontalAlignment = 'right';
-            app.PixelSizeEditFieldLabel.Position = [9 207 58 22];
+            app.PixelSizeEditFieldLabel.Position = [9 206 58 22];
             app.PixelSizeEditFieldLabel.Text = 'Pixel Size';
 
             % Create PixelSizeEditField
             app.PixelSizeEditField = uieditfield(app.UIFigure, 'text');
-            app.PixelSizeEditField.Position = [82 207 100 22];
+            app.PixelSizeEditField.Position = [82 206 100 22];
             app.PixelSizeEditField.Value = '30';
 
             % Create ConnectedComponentLabelingCheckBox
             app.ConnectedComponentLabelingCheckBox = uicheckbox(app.UIFigure);
             app.ConnectedComponentLabelingCheckBox.Enable = 'off';
             app.ConnectedComponentLabelingCheckBox.Text = 'Connected Component Labeling';
-            app.ConnectedComponentLabelingCheckBox.Position = [25 57 195 22];
+            app.ConnectedComponentLabelingCheckBox.Position = [25 56 195 22];
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';

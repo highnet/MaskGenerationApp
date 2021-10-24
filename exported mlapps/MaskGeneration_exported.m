@@ -96,10 +96,12 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
         
         function regionGrowing(app,imageIndex)
             
-            % temp_OriginalImage = app.images{1,imageIndex}; % load the original image from the data table
+            temp_OriginalImage = app.images{1,imageIndex}; % load the original image from the data table
             temp_MaskedImage = app.masks{1,imageIndex}; % compute a binary mask (>=)
             
-            imshow(app.combinedImage); % show the combined image
+            imshow(im2uint8(cat(3,temp_MaskedImage,temp_MaskedImage,temp_MaskedImage)) + temp_OriginalImage); % show the combined image
+            
+
             % try seed = ginput(1) % get the location of one mouse click
             try ginput(1) % wait for one mouse click
             catch
@@ -161,6 +163,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             app.images = images;
             app.imagesCount = imagesCount;
             app.UITable.Data = imageData; % copy the imagedata into a new table
+            
             if (strcmp(method,"Manual Thresholding")) % Turn on the UI components exclusive to the Manual Thresholding method
                 app.Panel.Visible = true;
             elseif (strcmp(method,"Otsu's Thresholding")) % Turn on the UI components exclusive to the Otsu's Thresholding method
