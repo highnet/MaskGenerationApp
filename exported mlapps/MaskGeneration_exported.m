@@ -17,22 +17,29 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
         ImageCounterLabel        matlab.ui.control.Label
         Image                    matlab.ui.control.Image
         Step3GenerateMasksLabel  matlab.ui.control.Label
-        Panel                    matlab.ui.container.Panel
+        ManualThresholdPanel     matlab.ui.container.Panel
         ManualThresholdLabel     matlab.ui.control.Label
         Slider                   matlab.ui.control.Slider
         FlipMaskButton           matlab.ui.control.Button
-        Panel_2                  matlab.ui.container.Panel
-        Panel_3                  matlab.ui.container.Panel
+        OtsuThresholdPanel       matlab.ui.container.Panel
+        RegionGrowingPanel       matlab.ui.container.Panel
         RegionGrowingLabel       matlab.ui.control.Label
         GrowNewRegionButton      matlab.ui.control.Button
+        MorphologyPanel          matlab.ui.container.Panel
+        MorphButton              matlab.ui.control.Button
+        ConnectedComponentLabelingPanel  matlab.ui.container.Panel
+        CCLButton                matlab.ui.control.Button
+        EdgeDetectionPanel       matlab.ui.container.Panel
     end
 
     
     properties (Access = private)
-        location; % char. The location of the sattelite images
-        pixelSize; % char. The pixel size of the satellite images
-        method; % char. The method of segmentation used 
-        imageData;
+        name;
+        coordinates;
+        band;
+        location; %char. The location of the sattelite images
+        pixelSize; %char. The pixel size of the satellite images
+        method; %char. The method of segmentation used
         images; % cell.
         imagesCount; % uint8
         displayedImageIndex = 1; % double. The index of the currently displayed image
@@ -156,20 +163,25 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
     methods (Access = private)
 
         % Code that executes after component creation
-        function startupFcn(app, location, pixelSize, method, imageData, images, imagesCount)
+        function startupFcn(app, name, location, coordinates, pixelSize, band, method, imageData, images, imagesCount)
+            app.name = name;
             app.location = location; % store the location value
+            app.coordinates = coordinates;
             app.pixelSize = pixelSize; % store the pixel size value
+            app.band = band;
             app.method = method; % store the method value
             app.images = images;
             app.imagesCount = imagesCount;
             app.UITable.Data = imageData; % copy the imagedata into a new table
             
             if (strcmp(method,"Manual Thresholding")) % Turn on the UI components exclusive to the Manual Thresholding method
-                app.Panel.Visible = true;
+                app.ManualThresholdPanel.Visible = true;
             elseif (strcmp(method,"Otsu's Thresholding")) % Turn on the UI components exclusive to the Otsu's Thresholding method
-                app.Panel_2.Visible = true;
+                app.OtsuThresholdPanel.Visible = true;
             elseif (strcmp(method,"Region Growing")) % Turn on the UI components exclusive to the Region Growing method
-                app.Panel_3.Visible = true;
+                app.RegionGrowingPanel.Visible = true;
+            elseif (strcmp(method,"Edge Detection")) % Turn on the UI components exclusive to the Region Growing method
+                app.RegionGrowingPanel.Visible = true;
             end
             app.masks = cell(1,imagesCount); % create a new storage matrix for all masks of all pictures, this is initially empty.
             
@@ -327,51 +339,77 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             app.Step3GenerateMasksLabel.Position = [4 632 135 22];
             app.Step3GenerateMasksLabel.Text = 'Step 3: Generate Masks';
 
-            % Create Panel
-            app.Panel = uipanel(app.UIFigure);
-            app.Panel.Visible = 'off';
-            app.Panel.Position = [4 420 172 125];
+            % Create ManualThresholdPanel
+            app.ManualThresholdPanel = uipanel(app.UIFigure);
+            app.ManualThresholdPanel.Visible = 'off';
+            app.ManualThresholdPanel.Position = [4 420 172 125];
 
             % Create ManualThresholdLabel
-            app.ManualThresholdLabel = uilabel(app.Panel);
+            app.ManualThresholdLabel = uilabel(app.ManualThresholdPanel);
             app.ManualThresholdLabel.FontWeight = 'bold';
             app.ManualThresholdLabel.Position = [39 94 108 22];
             app.ManualThresholdLabel.Text = 'Manual Threshold';
 
             % Create Slider
-            app.Slider = uislider(app.Panel);
+            app.Slider = uislider(app.ManualThresholdPanel);
             app.Slider.Limits = [0 255];
             app.Slider.ValueChangedFcn = createCallbackFcn(app, @SliderValueChanged, true);
             app.Slider.Position = [12 86 150 3];
             app.Slider.Value = 10;
 
             % Create FlipMaskButton
-            app.FlipMaskButton = uibutton(app.Panel, 'push');
+            app.FlipMaskButton = uibutton(app.ManualThresholdPanel, 'push');
             app.FlipMaskButton.ButtonPushedFcn = createCallbackFcn(app, @FlipMaskButtonPushed, true);
             app.FlipMaskButton.Position = [39 20 100 22];
             app.FlipMaskButton.Text = 'Flip Mask';
 
-            % Create Panel_2
-            app.Panel_2 = uipanel(app.UIFigure);
-            app.Panel_2.Visible = 'off';
-            app.Panel_2.Position = [4 468 172 84];
+            % Create OtsuThresholdPanel
+            app.OtsuThresholdPanel = uipanel(app.UIFigure);
+            app.OtsuThresholdPanel.Visible = 'off';
+            app.OtsuThresholdPanel.Position = [4 468 172 84];
 
-            % Create Panel_3
-            app.Panel_3 = uipanel(app.UIFigure);
-            app.Panel_3.Visible = 'off';
-            app.Panel_3.Position = [4 466 172 84];
+            % Create RegionGrowingPanel
+            app.RegionGrowingPanel = uipanel(app.UIFigure);
+            app.RegionGrowingPanel.Visible = 'off';
+            app.RegionGrowingPanel.Position = [4 468 172 82];
 
             % Create RegionGrowingLabel
-            app.RegionGrowingLabel = uilabel(app.Panel_3);
+            app.RegionGrowingLabel = uilabel(app.RegionGrowingPanel);
             app.RegionGrowingLabel.FontWeight = 'bold';
-            app.RegionGrowingLabel.Position = [36 61 98 22];
+            app.RegionGrowingLabel.Position = [36 59 98 22];
             app.RegionGrowingLabel.Text = 'Region Growing';
 
             % Create GrowNewRegionButton
-            app.GrowNewRegionButton = uibutton(app.Panel_3, 'push');
+            app.GrowNewRegionButton = uibutton(app.RegionGrowingPanel, 'push');
             app.GrowNewRegionButton.ButtonPushedFcn = createCallbackFcn(app, @GrowNewRegionButtonPushed, true);
-            app.GrowNewRegionButton.Position = [26 37 113 22];
+            app.GrowNewRegionButton.Position = [26 35 113 22];
             app.GrowNewRegionButton.Text = 'Grow New Region';
+
+            % Create MorphologyPanel
+            app.MorphologyPanel = uipanel(app.UIFigure);
+            app.MorphologyPanel.Title = 'Morphology';
+            app.MorphologyPanel.Position = [5 9 133 84];
+
+            % Create MorphButton
+            app.MorphButton = uibutton(app.MorphologyPanel, 'push');
+            app.MorphButton.Position = [27 29 100 22];
+            app.MorphButton.Text = 'Morph';
+
+            % Create ConnectedComponentLabelingPanel
+            app.ConnectedComponentLabelingPanel = uipanel(app.UIFigure);
+            app.ConnectedComponentLabelingPanel.Title = 'Connected Component Labeling';
+            app.ConnectedComponentLabelingPanel.Position = [142 9 152 84];
+
+            % Create CCLButton
+            app.CCLButton = uibutton(app.ConnectedComponentLabelingPanel, 'push');
+            app.CCLButton.Position = [23 19 100 22];
+            app.CCLButton.Text = 'CCL';
+
+            % Create EdgeDetectionPanel
+            app.EdgeDetectionPanel = uipanel(app.UIFigure);
+            app.EdgeDetectionPanel.Title = 'Edge Detection';
+            app.EdgeDetectionPanel.Visible = 'off';
+            app.EdgeDetectionPanel.Position = [16 468 139 98];
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';

@@ -2,8 +2,10 @@ classdef HomeScreen_exported < matlab.apps.AppBase
 
     % Properties that correspond to app components
     properties (Access = public)
-        UIFigure           matlab.ui.Figure
+        WaterLabDevelopmentBuildUIFigure  matlab.ui.Figure
         FileMenu           matlab.ui.container.Menu
+        NewMenu            matlab.ui.container.Menu
+        ExitMenu           matlab.ui.container.Menu
         Background         matlab.ui.control.Image
         GetImagesButton    matlab.ui.control.Button
         AboutButton        matlab.ui.control.Button
@@ -23,6 +25,11 @@ classdef HomeScreen_exported < matlab.apps.AppBase
 
     % Callbacks that handle component events
     methods (Access = private)
+
+        % Code that executes after component creation
+        function startupFcn(app)
+            
+        end
 
         % Image clicked function: Splash
         function SplashClicked(app, event)
@@ -60,6 +67,12 @@ classdef HomeScreen_exported < matlab.apps.AppBase
         function AboutButtonPushed(app, event)
             About();
         end
+
+        % Menu selected function: NewMenu
+        function NewMenuSelected(app, event)
+            ConfigureSettings();
+            app.delete;
+        end
     end
 
     % Component initialization
@@ -68,24 +81,33 @@ classdef HomeScreen_exported < matlab.apps.AppBase
         % Create UIFigure and components
         function createComponents(app)
 
-            % Create UIFigure and hide until all components are created
-            app.UIFigure = uifigure('Visible', 'off');
-            app.UIFigure.Position = [100 100 800 600];
-            app.UIFigure.Name = 'MATLAB App';
+            % Create WaterLabDevelopmentBuildUIFigure and hide until all components are created
+            app.WaterLabDevelopmentBuildUIFigure = uifigure('Visible', 'off');
+            app.WaterLabDevelopmentBuildUIFigure.Position = [100 100 800 600];
+            app.WaterLabDevelopmentBuildUIFigure.Name = 'WaterLab (Development Build)';
+            app.WaterLabDevelopmentBuildUIFigure.Icon = 'GetImages.PNG';
 
             % Create FileMenu
-            app.FileMenu = uimenu(app.UIFigure);
-            app.FileMenu.Enable = 'off';
+            app.FileMenu = uimenu(app.WaterLabDevelopmentBuildUIFigure);
             app.FileMenu.Text = 'File';
 
+            % Create NewMenu
+            app.NewMenu = uimenu(app.FileMenu);
+            app.NewMenu.MenuSelectedFcn = createCallbackFcn(app, @NewMenuSelected, true);
+            app.NewMenu.Text = 'New';
+
+            % Create ExitMenu
+            app.ExitMenu = uimenu(app.FileMenu);
+            app.ExitMenu.Text = 'Exit';
+
             % Create Background
-            app.Background = uiimage(app.UIFigure);
+            app.Background = uiimage(app.WaterLabDevelopmentBuildUIFigure);
             app.Background.ScaleMethod = 'fill';
             app.Background.Position = [1 1 800 600];
             app.Background.ImageSource = 'bg.PNG';
 
             % Create GetImagesButton
-            app.GetImagesButton = uibutton(app.UIFigure, 'push');
+            app.GetImagesButton = uibutton(app.WaterLabDevelopmentBuildUIFigure, 'push');
             app.GetImagesButton.ButtonPushedFcn = createCallbackFcn(app, @GetImagesButtonPushed, true);
             app.GetImagesButton.Icon = 'GetImages.PNG';
             app.GetImagesButton.IconAlignment = 'center';
@@ -94,7 +116,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.GetImagesButton.Text = '';
 
             % Create AboutButton
-            app.AboutButton = uibutton(app.UIFigure, 'push');
+            app.AboutButton = uibutton(app.WaterLabDevelopmentBuildUIFigure, 'push');
             app.AboutButton.ButtonPushedFcn = createCallbackFcn(app, @AboutButtonPushed, true);
             app.AboutButton.Icon = 'About.PNG';
             app.AboutButton.IconAlignment = 'center';
@@ -103,7 +125,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.AboutButton.Text = '';
 
             % Create ImageEditorButton
-            app.ImageEditorButton = uibutton(app.UIFigure, 'push');
+            app.ImageEditorButton = uibutton(app.WaterLabDevelopmentBuildUIFigure, 'push');
             app.ImageEditorButton.ButtonPushedFcn = createCallbackFcn(app, @ImageEditorButtonPushed, true);
             app.ImageEditorButton.Icon = 'EditImages.PNG';
             app.ImageEditorButton.IconAlignment = 'center';
@@ -112,7 +134,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.ImageEditorButton.Text = '';
 
             % Create ExamplesButton
-            app.ExamplesButton = uibutton(app.UIFigure, 'push');
+            app.ExamplesButton = uibutton(app.WaterLabDevelopmentBuildUIFigure, 'push');
             app.ExamplesButton.ButtonPushedFcn = createCallbackFcn(app, @ExamplesButtonPushed, true);
             app.ExamplesButton.Icon = 'Capture.PNG';
             app.ExamplesButton.IconAlignment = 'center';
@@ -121,7 +143,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.ExamplesButton.Text = '';
 
             % Create UserManualButton
-            app.UserManualButton = uibutton(app.UIFigure, 'push');
+            app.UserManualButton = uibutton(app.WaterLabDevelopmentBuildUIFigure, 'push');
             app.UserManualButton.ButtonPushedFcn = createCallbackFcn(app, @UserManualButtonPushed, true);
             app.UserManualButton.Icon = 'UserManual.PNG';
             app.UserManualButton.IconAlignment = 'center';
@@ -130,7 +152,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.UserManualButton.Text = '';
 
             % Create StartButton
-            app.StartButton = uibutton(app.UIFigure, 'push');
+            app.StartButton = uibutton(app.WaterLabDevelopmentBuildUIFigure, 'push');
             app.StartButton.ButtonPushedFcn = createCallbackFcn(app, @StartButtonPushed, true);
             app.StartButton.Icon = 'Start.PNG';
             app.StartButton.IconAlignment = 'center';
@@ -139,7 +161,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.StartButton.Text = '';
 
             % Create UserManualLabel
-            app.UserManualLabel = uilabel(app.UIFigure);
+            app.UserManualLabel = uilabel(app.WaterLabDevelopmentBuildUIFigure);
             app.UserManualLabel.FontName = 'Arial';
             app.UserManualLabel.FontSize = 24;
             app.UserManualLabel.FontColor = [1 1 1];
@@ -147,7 +169,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.UserManualLabel.Text = 'User Manual';
 
             % Create ImageEditorLabel
-            app.ImageEditorLabel = uilabel(app.UIFigure);
+            app.ImageEditorLabel = uilabel(app.WaterLabDevelopmentBuildUIFigure);
             app.ImageEditorLabel.FontName = 'Arial';
             app.ImageEditorLabel.FontSize = 24;
             app.ImageEditorLabel.FontColor = [1 1 1];
@@ -155,7 +177,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.ImageEditorLabel.Text = 'Image Editor';
 
             % Create ExamplesLabel
-            app.ExamplesLabel = uilabel(app.UIFigure);
+            app.ExamplesLabel = uilabel(app.WaterLabDevelopmentBuildUIFigure);
             app.ExamplesLabel.FontName = 'Arial';
             app.ExamplesLabel.FontSize = 24;
             app.ExamplesLabel.FontColor = [1 1 1];
@@ -163,7 +185,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.ExamplesLabel.Text = 'Examples';
 
             % Create GetImagesLabel
-            app.GetImagesLabel = uilabel(app.UIFigure);
+            app.GetImagesLabel = uilabel(app.WaterLabDevelopmentBuildUIFigure);
             app.GetImagesLabel.FontName = 'Arial';
             app.GetImagesLabel.FontSize = 24;
             app.GetImagesLabel.FontColor = [1 1 1];
@@ -171,7 +193,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.GetImagesLabel.Text = 'Get Images';
 
             % Create AboutLabel
-            app.AboutLabel = uilabel(app.UIFigure);
+            app.AboutLabel = uilabel(app.WaterLabDevelopmentBuildUIFigure);
             app.AboutLabel.FontName = 'Arial';
             app.AboutLabel.FontSize = 24;
             app.AboutLabel.FontColor = [1 1 1];
@@ -179,7 +201,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.AboutLabel.Text = 'About';
 
             % Create StartLabel
-            app.StartLabel = uilabel(app.UIFigure);
+            app.StartLabel = uilabel(app.WaterLabDevelopmentBuildUIFigure);
             app.StartLabel.FontName = 'Arial';
             app.StartLabel.FontSize = 32;
             app.StartLabel.FontColor = [1 1 1];
@@ -187,19 +209,19 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.StartLabel.Text = 'Start';
 
             % Create Title
-            app.Title = uiimage(app.UIFigure);
+            app.Title = uiimage(app.WaterLabDevelopmentBuildUIFigure);
             app.Title.Position = [146 354 471 150];
             app.Title.ImageSource = 'title.PNG';
 
             % Create Splash
-            app.Splash = uiimage(app.UIFigure);
+            app.Splash = uiimage(app.WaterLabDevelopmentBuildUIFigure);
             app.Splash.ScaleMethod = 'fill';
             app.Splash.ImageClickedFcn = createCallbackFcn(app, @SplashClicked, true);
             app.Splash.Position = [1 1 798 601];
             app.Splash.ImageSource = 'splash.gif';
 
             % Show the figure after all components are created
-            app.UIFigure.Visible = 'on';
+            app.WaterLabDevelopmentBuildUIFigure.Visible = 'on';
         end
     end
 
@@ -213,7 +235,10 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             createComponents(app)
 
             % Register the app with App Designer
-            registerApp(app, app.UIFigure)
+            registerApp(app, app.WaterLabDevelopmentBuildUIFigure)
+
+            % Execute the startup function
+            runStartupFcn(app, @startupFcn)
 
             if nargout == 0
                 clear app
@@ -224,7 +249,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
         function delete(app)
 
             % Delete UIFigure when app is deleted
-            delete(app.UIFigure)
+            delete(app.WaterLabDevelopmentBuildUIFigure)
         end
     end
 end

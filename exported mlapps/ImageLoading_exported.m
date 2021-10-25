@@ -2,27 +2,28 @@ classdef ImageLoading_exported < matlab.apps.AppBase
 
     % Properties that correspond to app components
     properties (Access = public)
-        UIFigure                  matlab.ui.Figure
-        FileMenu                  matlab.ui.container.Menu
-        LoadPNGButton             matlab.ui.control.Button
-        Image                     matlab.ui.control.Image
-        NextStepButton            matlab.ui.control.Button
-        Step2LoadyourImagesLabel  matlab.ui.control.Label
-        LocationLabel             matlab.ui.control.Label
-        locLabel                  matlab.ui.control.Label
-        PixelSizeLabel            matlab.ui.control.Label
-        pixsizLabel               matlab.ui.control.Label
-        MethodLabel               matlab.ui.control.Label
-        metLabel                  matlab.ui.control.Label
-        ProjectMetadataLabel      matlab.ui.control.Label
-        UITable                   matlab.ui.control.Table
-        PictureMetadataLabel      matlab.ui.control.Label
-        RemoveImageButton         matlab.ui.control.Button
+        UIFigure           matlab.ui.Figure
+        FileMenu           matlab.ui.container.Menu
+        Background         matlab.ui.control.Image
+        LoadPNGButton      matlab.ui.control.Button
+        Image              matlab.ui.control.Image
+        NextButton         matlab.ui.control.Button
+        locationLabel      matlab.ui.control.Label
+        pixelSizeLabel     matlab.ui.control.Label
+        MethodLabel        matlab.ui.control.Label
+        UITable            matlab.ui.control.Table
+        RemoveImageButton  matlab.ui.control.Button
+        NameLabel          matlab.ui.control.Label
+        CoordinatesLabel   matlab.ui.control.Label
+        ImageBandLabel     matlab.ui.control.Label
     end
 
     
     properties (Access = private)
         displayedImageIndex; %double. The index of the currently displayed image
+        name;
+        coordinates;
+        band;
         location; %char. The location of the sattelite images
         pixelSize; %char. The pixel size of the satellite images
         method; %char. The method of segmentation used
@@ -60,13 +61,21 @@ classdef ImageLoading_exported < matlab.apps.AppBase
     methods (Access = private)
 
         % Code that executes after component creation
-        function startupFcn(app, location, pixelSize, method)
+        function startupFcn(app, name, location, coordinates, pixelSize, band, method)
+            app.name = name;
             app.location = location; % store the location value
+            app.coordinates = coordinates;
             app.pixelSize = pixelSize; % store the pixel size value
+            app.band = band;
             app.method = method; % store the method value
-            app.locLabel.Text = location; %  set the location label
-            app.pixsizLabel.Text = pixelSize; % set the pixel size labe
-            app.metLabel.Text = method; % set the method label
+            
+            app.NameLabel.Text = strcat("Project Name: ", name);
+            app.locationLabel.Text = strcat("Location: ", location); %  set the location label
+            app.CoordinatesLabel.Text = strcat("Coordinates: ", coordinates);
+            app.pixelSizeLabel.Text = strcat("Pixel Size: ", pixelSize, "(m^2)"); % set the pixel size labe
+            app.ImageBandLabel.Text = strcat("Image Band: ", band);
+            app.MethodLabel.Text = strcat("Method: ", method); % set the method label
+            
             app.images = cell(1,1024);
         end
 
@@ -82,12 +91,12 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             updateimage(app); % update the displayed image
         end
 
-        % Button pushed function: NextStepButton
-        function NextStepButtonPushed(app, event)
+        % Button pushed function: NextButton
+        function NextButtonPushed(app, event)
             if(isempty(app.UITable.Data)) % make sure the user has uploaded at least one image
                 return;
             end
-            MaskGeneration(app.locLabel.Text,app.pixsizLabel.Text,app.metLabel.Text,app.UITable.Data,app.images,app.imagesCount); % open a MaskGeneration window with the parameters
+            MaskGeneration(app.name,app.location,app.coordinates,app.pixelSize,app.band,app.method,app.UITable.Data,app.images,app.imagesCount); % open a MaskGeneration window with the parameters
             app.delete; % close this window
         end
 
@@ -110,7 +119,7 @@ classdef ImageLoading_exported < matlab.apps.AppBase
 
             % Create UIFigure and hide until all components are created
             app.UIFigure = uifigure('Visible', 'off');
-            app.UIFigure.Position = [100 100 899 481];
+            app.UIFigure.Position = [100 100 800 600];
             app.UIFigure.Name = 'MATLAB App';
 
             % Create FileMenu
@@ -118,63 +127,47 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             app.FileMenu.Enable = 'off';
             app.FileMenu.Text = 'File';
 
+            % Create Background
+            app.Background = uiimage(app.UIFigure);
+            app.Background.ScaleMethod = 'fill';
+            app.Background.Position = [1 1 800 600];
+            app.Background.ImageSource = 'bg.PNG';
+
             % Create LoadPNGButton
             app.LoadPNGButton = uibutton(app.UIFigure, 'push');
             app.LoadPNGButton.ButtonPushedFcn = createCallbackFcn(app, @LoadPNGButtonPushed, true);
-            app.LoadPNGButton.Position = [258 17 100 22];
+            app.LoadPNGButton.Position = [257 47 100 22];
             app.LoadPNGButton.Text = {'Load .PNG'; ''};
 
             % Create Image
             app.Image = uiimage(app.UIFigure);
             app.Image.Tooltip = {'Here you can load as many images as you want and edit their image year in the table blow.'; ''; 'Warning: all images should have the same size(x;y;dimensions) and be taken by the same satellite at different dates for meaningful results.'};
-            app.Image.Position = [298 251 194 196];
+            app.Image.Position = [156 153 411 401];
 
-            % Create NextStepButton
-            app.NextStepButton = uibutton(app.UIFigure, 'push');
-            app.NextStepButton.ButtonPushedFcn = createCallbackFcn(app, @NextStepButtonPushed, true);
-            app.NextStepButton.FontWeight = 'bold';
-            app.NextStepButton.Position = [775 17 100 22];
-            app.NextStepButton.Text = 'Next Step';
+            % Create NextButton
+            app.NextButton = uibutton(app.UIFigure, 'push');
+            app.NextButton.ButtonPushedFcn = createCallbackFcn(app, @NextButtonPushed, true);
+            app.NextButton.Icon = 'Start.PNG';
+            app.NextButton.IconAlignment = 'center';
+            app.NextButton.BackgroundColor = [0.3216 0.8902 1];
+            app.NextButton.FontWeight = 'bold';
+            app.NextButton.Position = [694 9 98 60];
+            app.NextButton.Text = '';
 
-            % Create Step2LoadyourImagesLabel
-            app.Step2LoadyourImagesLabel = uilabel(app.UIFigure);
-            app.Step2LoadyourImagesLabel.Position = [4 460 143 22];
-            app.Step2LoadyourImagesLabel.Text = 'Step 2: Load your Images';
+            % Create locationLabel
+            app.locationLabel = uilabel(app.UIFigure);
+            app.locationLabel.Position = [13 132 208 22];
+            app.locationLabel.Text = 'Location: ';
 
-            % Create LocationLabel
-            app.LocationLabel = uilabel(app.UIFigure);
-            app.LocationLabel.Position = [676 374 54 22];
-            app.LocationLabel.Text = 'Location:';
-
-            % Create locLabel
-            app.locLabel = uilabel(app.UIFigure);
-            app.locLabel.Position = [742 374 112 22];
-            app.locLabel.Text = 'loc';
-
-            % Create PixelSizeLabel
-            app.PixelSizeLabel = uilabel(app.UIFigure);
-            app.PixelSizeLabel.Position = [676 343 62 22];
-            app.PixelSizeLabel.Text = 'Pixel Size:';
-
-            % Create pixsizLabel
-            app.pixsizLabel = uilabel(app.UIFigure);
-            app.pixsizLabel.Position = [744 343 110 22];
-            app.pixsizLabel.Text = 'pix siz';
+            % Create pixelSizeLabel
+            app.pixelSizeLabel = uilabel(app.UIFigure);
+            app.pixelSizeLabel.Position = [11 88 210 22];
+            app.pixelSizeLabel.Text = 'Pixel Size: ';
 
             % Create MethodLabel
             app.MethodLabel = uilabel(app.UIFigure);
-            app.MethodLabel.Position = [676 312 49 22];
-            app.MethodLabel.Text = 'Method:';
-
-            % Create metLabel
-            app.metLabel = uilabel(app.UIFigure);
-            app.metLabel.Position = [744 312 110 22];
-            app.metLabel.Text = 'met';
-
-            % Create ProjectMetadataLabel
-            app.ProjectMetadataLabel = uilabel(app.UIFigure);
-            app.ProjectMetadataLabel.Position = [690 406 96 22];
-            app.ProjectMetadataLabel.Text = 'Project Metadata';
+            app.MethodLabel.Position = [11 44 210 22];
+            app.MethodLabel.Text = 'Method: ';
 
             % Create UITable
             app.UITable = uitable(app.UIFigure);
@@ -183,18 +176,28 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             app.UITable.ColumnSortable = [true true true true];
             app.UITable.ColumnEditable = [false true false false];
             app.UITable.CellSelectionCallback = createCallbackFcn(app, @UITableCellSelection, true);
-            app.UITable.Position = [46 55 768 176];
-
-            % Create PictureMetadataLabel
-            app.PictureMetadataLabel = uilabel(app.UIFigure);
-            app.PictureMetadataLabel.Position = [72 230 96 22];
-            app.PictureMetadataLabel.Text = 'Picture Metadata';
+            app.UITable.Position = [602 81 190 520];
 
             % Create RemoveImageButton
             app.RemoveImageButton = uibutton(app.UIFigure, 'push');
             app.RemoveImageButton.ButtonPushedFcn = createCallbackFcn(app, @RemoveImageButtonPushed, true);
-            app.RemoveImageButton.Position = [392 17 100 22];
+            app.RemoveImageButton.Position = [378 47 100 22];
             app.RemoveImageButton.Text = 'Remove Image';
+
+            % Create NameLabel
+            app.NameLabel = uilabel(app.UIFigure);
+            app.NameLabel.Position = [258 553 207 22];
+            app.NameLabel.Text = 'Name: ';
+
+            % Create CoordinatesLabel
+            app.CoordinatesLabel = uilabel(app.UIFigure);
+            app.CoordinatesLabel.Position = [13 110 208 22];
+            app.CoordinatesLabel.Text = 'Coordinates: ';
+
+            % Create ImageBandLabel
+            app.ImageBandLabel = uilabel(app.UIFigure);
+            app.ImageBandLabel.Position = [11 66 210 22];
+            app.ImageBandLabel.Text = 'Image Band: ';
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
