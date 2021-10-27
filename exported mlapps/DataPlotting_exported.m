@@ -51,7 +51,7 @@ classdef DataPlotting_exported < matlab.apps.AppBase
             app.UIAxes.Title.String =  app.location;
             app.UIAxes.Subtitle.String = app.method;
             app.UIAxes.XLabel.String = "Year";
-            app.UIAxes.YLabel.String = "Pixel Count";
+            app.UIAxes.YLabel.String = "Coverage (squared meters)";
         end
     end
 

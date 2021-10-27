@@ -48,7 +48,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
 
             % Create WaterlabUIFigure and hide until all components are created
             app.WaterlabUIFigure = uifigure('Visible', 'off');
-            app.WaterlabUIFigure.Position = [100 100 224 340];
+            app.WaterlabUIFigure.Position = [100 100 221 352];
             app.WaterlabUIFigure.Name = 'Waterlab';
             app.WaterlabUIFigure.Icon = 'GetImages.PNG';
 
@@ -63,7 +63,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.NextButton.IconAlignment = 'center';
             app.NextButton.BackgroundColor = [0.3216 0.8902 1];
             app.NextButton.FontWeight = 'bold';
-            app.NextButton.Position = [61 3 103 56];
+            app.NextButton.Position = [61 15 103 56];
             app.NextButton.Text = 'Next Step';
 
             % Create ButtonGroup
@@ -71,7 +71,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.ButtonGroup.TitlePosition = 'centertop';
             app.ButtonGroup.BackgroundColor = [0.3216 0.8902 1];
             app.ButtonGroup.FontName = 'Arial';
-            app.ButtonGroup.Position = [14 63 204 92];
+            app.ButtonGroup.Position = [14 75 204 92];
 
             % Create ManualThresholdingButton
             app.ManualThresholdingButton = uiradiobutton(app.ButtonGroup);
@@ -111,7 +111,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.LocationLabel.HorizontalAlignment = 'right';
             app.LocationLabel.FontName = 'Arial';
             app.LocationLabel.FontSize = 16;
-            app.LocationLabel.Position = [35 276 70 22];
+            app.LocationLabel.Position = [35 288 70 22];
             app.LocationLabel.Text = 'Location:';
 
             % Create LocationEditField
@@ -119,7 +119,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.LocationEditField.FontSize = 14;
             app.LocationEditField.FontColor = [1 1 1];
             app.LocationEditField.BackgroundColor = [0.3216 0.8902 1];
-            app.LocationEditField.Position = [107 275 111 22];
+            app.LocationEditField.Position = [107 287 111 22];
             app.LocationEditField.Value = 'Testing Location';
 
             % Create PixelSizeEditFieldLabel
@@ -127,7 +127,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.PixelSizeEditFieldLabel.HorizontalAlignment = 'right';
             app.PixelSizeEditFieldLabel.FontName = 'Arial';
             app.PixelSizeEditFieldLabel.FontSize = 16;
-            app.PixelSizeEditFieldLabel.Position = [23 210 80 22];
+            app.PixelSizeEditFieldLabel.Position = [23 222 80 22];
             app.PixelSizeEditFieldLabel.Text = 'Pixel Size:';
 
             % Create PixelSizeEditField
@@ -135,7 +135,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.PixelSizeEditField.FontSize = 14;
             app.PixelSizeEditField.FontColor = [1 1 1];
             app.PixelSizeEditField.BackgroundColor = [0.3216 0.8902 1];
-            app.PixelSizeEditField.Position = [107 210 61 22];
+            app.PixelSizeEditField.Position = [107 222 61 22];
             app.PixelSizeEditField.Value = '30';
 
             % Create CoordinatesLabel
@@ -143,7 +143,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.CoordinatesLabel.HorizontalAlignment = 'right';
             app.CoordinatesLabel.FontName = 'Arial';
             app.CoordinatesLabel.FontSize = 16;
-            app.CoordinatesLabel.Position = [7 241 96 22];
+            app.CoordinatesLabel.Position = [7 253 96 22];
             app.CoordinatesLabel.Text = 'Coordinates:';
 
             % Create CoordinatesEditField
@@ -151,7 +151,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.CoordinatesEditField.FontSize = 14;
             app.CoordinatesEditField.FontColor = [1 1 1];
             app.CoordinatesEditField.BackgroundColor = [0.3216 0.8902 1];
-            app.CoordinatesEditField.Position = [108 244 111 22];
+            app.CoordinatesEditField.Position = [108 256 111 22];
             app.CoordinatesEditField.Value = '48.209879932502155, 16.37450700759511';
 
             % Create NameLabel
@@ -159,7 +159,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.NameLabel.HorizontalAlignment = 'right';
             app.NameLabel.FontName = 'Arial';
             app.NameLabel.FontSize = 16;
-            app.NameLabel.Position = [47 306 53 22];
+            app.NameLabel.Position = [47 318 53 22];
             app.NameLabel.Text = 'Name:';
 
             % Create NameEditField
@@ -167,14 +167,14 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.NameEditField.FontSize = 14;
             app.NameEditField.FontColor = [1 1 1];
             app.NameEditField.BackgroundColor = [0.3216 0.8902 1];
-            app.NameEditField.Position = [107 306 111 22];
+            app.NameEditField.Position = [107 318 111 22];
             app.NameEditField.Value = 'Test Project';
 
             % Create m2Label
             app.m2Label = uilabel(app.WaterlabUIFigure);
             app.m2Label.FontName = 'Arial';
             app.m2Label.FontSize = 16;
-            app.m2Label.Position = [173 210 46 22];
+            app.m2Label.Position = [173 222 46 22];
             app.m2Label.Text = '(m^2)';
 
             % Create ImageBandLabel
@@ -182,7 +182,7 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.ImageBandLabel.HorizontalAlignment = 'right';
             app.ImageBandLabel.FontName = 'Arial';
             app.ImageBandLabel.FontSize = 16;
-            app.ImageBandLabel.Position = [8 178 96 22];
+            app.ImageBandLabel.Position = [8 190 96 22];
             app.ImageBandLabel.Text = 'Image Band:';
 
             % Create ImageBandEditField
@@ -191,14 +191,14 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
             app.ImageBandEditField.FontSize = 14;
             app.ImageBandEditField.FontColor = [1 1 1];
             app.ImageBandEditField.BackgroundColor = [0.3216 0.8902 1];
-            app.ImageBandEditField.Position = [108 178 111 22];
+            app.ImageBandEditField.Position = [108 190 111 22];
             app.ImageBandEditField.Value = 'Near-infrared';
 
             % Create SegmentationMethodLabel
             app.SegmentationMethodLabel = uilabel(app.WaterlabUIFigure);
             app.SegmentationMethodLabel.FontName = 'Arial';
             app.SegmentationMethodLabel.FontSize = 16;
-            app.SegmentationMethodLabel.Position = [5 154 166 22];
+            app.SegmentationMethodLabel.Position = [5 166 166 22];
             app.SegmentationMethodLabel.Text = 'Segmentation Method:';
 
             % Show the figure after all components are created

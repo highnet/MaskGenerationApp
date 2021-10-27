@@ -15,7 +15,7 @@ classdef About_exported < matlab.apps.AppBase
 
             % Create UIFigure and hide until all components are created
             app.UIFigure = uifigure('Visible', 'off');
-            app.UIFigure.Position = [100 100 190 218];
+            app.UIFigure.Position = [100 100 195 244];
             app.UIFigure.Name = 'MATLAB App';
 
             % Create Label
@@ -23,13 +23,13 @@ classdef About_exported < matlab.apps.AppBase
             app.Label.HorizontalAlignment = 'center';
             app.Label.WordWrap = 'on';
             app.Label.FontSize = 14;
-            app.Label.Position = [8 5 189 176];
+            app.Label.Position = [5 14 189 193];
             app.Label.Text = {'Mask Generation App environment for EDBV WS2021 TU Wien'; ''; 'AC5 Group Members:'; ''; '1. Telleria Joaquin'; '2. Tomanov Svetlin'; '3. Keser Sergej'; '4. Seifried Maximilian Jack'; '5. Payer Maximilian'; ''};
 
             % Create AboutLabel
             app.AboutLabel = uilabel(app.UIFigure);
             app.AboutLabel.FontSize = 30;
-            app.AboutLabel.Position = [56 180 84 36];
+            app.AboutLabel.Position = [56 206 84 36];
             app.AboutLabel.Text = 'About';
 
             % Show the figure after all components are created

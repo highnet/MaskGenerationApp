@@ -1,4 +1,4 @@
-classdef CaseStudies_exported < matlab.apps.AppBase
+iclassdef CaseStudies_exported < matlab.apps.AppBase
 
     % Properties that correspond to app components
     properties (Access = public)

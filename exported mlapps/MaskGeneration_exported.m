@@ -101,7 +101,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             
         end
         
-        function regionGrowing(app,imageIndex)
+        function regionGrowing(app,imageIndex,similarity)
             
             temp_OriginalImage = app.images{1,imageIndex}; % load the original image from the data table
             temp_MaskedImage = app.masks{1,imageIndex}; % compute a binary mask (>=)
@@ -110,11 +110,12 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
             
 
             % try seed = ginput(1) % get the location of one mouse click
-            try ginput(1) % wait for one mouse click
+            try seed = ginput(1) % wait for one mouse click
             catch
             end
             
             temp_MaskedImage = imnoise(temp_MaskedImage,'salt & pepper',0.1); % write some random data into the mask purely for testing purposes
+            
             app.masks{imageIndex} = temp_MaskedImage; % save the mask so we can keep adding information to it
             
         end
@@ -142,6 +143,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
                     app.masks{i} = temp_maskedImage; % we save the mask on the masks cell
                 end
             end
+            
         end
         
         function updateDisplayedImages(app) % updates the displayed images
@@ -197,9 +199,14 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
                 return;
             end
             
+            originalImage = app.images{1,app.displayedImageIndex}; % load the original image from the data table
+            maskedImage = app.masks{app.displayedImageIndex}; % Load a mask from the masks cell if it already exists
+            combinedImage = im2uint8(cat(3,maskedImage,maskedImage,maskedImage)) + originalImage;
+   
             timestamp = num2str(posixtime(datetime)); 
-            imwrite(app.maskedImage,strcat(selectedDirectory,"\",timestamp,"_",num2str(app.displayedImageIndex),"_mask.png")); % store an image of the mask
-            imwrite(app.combinedImage,strcat(selectedDirectory,"\",timestamp,"_",num2str(app.displayedImageIndex),"_mask_combined.png")); % store an image of the composite
+            
+            imwrite(maskedImage,strcat(selectedDirectory,"\",timestamp,"_",num2str(app.displayedImageIndex),"_mask.png")); % store an image of the mask
+            imwrite(combinedImage,strcat(selectedDirectory,"\",timestamp,"_",num2str(app.displayedImageIndex),"_mask_combined.png")); % store an image of the composite
         end
 
         % Button pushed function: NextButton
@@ -250,6 +257,19 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
         function NextStepButtonPushed(app, event)
             DataPlotting(app.location,app.pixelSize,app.method,app.UITable.Data,app.images,app.imagesCount,app.masks);
             app.delete;
+        end
+
+        % Button pushed function: CCLButton
+        function CCLButtonPushed(app, event)
+            
+        end
+
+        % Button pushed function: MorphButton
+        function MorphButtonPushed(app, event)
+            maskedImage = app.masks{app.displayedImageIndex}; % Load a mask from the masks cell if it already exists            
+            %do morphology
+            app.masks{app.displayedImageIndex} = maskedImage;
+            updateDisplayedImages(app); % update the displayed images
         end
     end
 
@@ -392,6 +412,7 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
             % Create MorphButton
             app.MorphButton = uibutton(app.MorphologyPanel, 'push');
+            app.MorphButton.ButtonPushedFcn = createCallbackFcn(app, @MorphButtonPushed, true);
             app.MorphButton.Position = [27 29 100 22];
             app.MorphButton.Text = 'Morph';
 
@@ -402,14 +423,16 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
 
             % Create CCLButton
             app.CCLButton = uibutton(app.ConnectedComponentLabelingPanel, 'push');
+            app.CCLButton.ButtonPushedFcn = createCallbackFcn(app, @CCLButtonPushed, true);
             app.CCLButton.Position = [23 19 100 22];
             app.CCLButton.Text = 'CCL';
 
             % Create EdgeDetectionPanel
             app.EdgeDetectionPanel = uipanel(app.UIFigure);
+            app.EdgeDetectionPanel.Enable = 'off';
             app.EdgeDetectionPanel.Title = 'Edge Detection';
             app.EdgeDetectionPanel.Visible = 'off';
-            app.EdgeDetectionPanel.Position = [16 468 139 98];
+            app.EdgeDetectionPanel.Position = [88 514 139 98];
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
