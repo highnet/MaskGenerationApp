@@ -103,16 +103,16 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             % Create Background
             app.Background = uiimage(app.WaterLabDevelopmentBuildUIFigure);
             app.Background.ScaleMethod = 'fill';
-            app.Background.Position = [1 1 800 600];
+            app.Background.Position = [1 4 800 600];
             app.Background.ImageSource = 'bg.PNG';
 
             % Create GetImagesButton
             app.GetImagesButton = uibutton(app.WaterLabDevelopmentBuildUIFigure, 'push');
             app.GetImagesButton.ButtonPushedFcn = createCallbackFcn(app, @GetImagesButtonPushed, true);
-            app.GetImagesButton.Icon = 'GetImages.PNG';
+            app.GetImagesButton.Icon = 'EditImages.PNG';
             app.GetImagesButton.IconAlignment = 'center';
             app.GetImagesButton.BackgroundColor = [0.3216 0.8902 1];
-            app.GetImagesButton.Position = [661 79 107 91];
+            app.GetImagesButton.Position = [662 79 107 91];
             app.GetImagesButton.Text = '';
 
             % Create AboutButton
@@ -121,7 +121,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.AboutButton.Icon = 'About.PNG';
             app.AboutButton.IconAlignment = 'center';
             app.AboutButton.BackgroundColor = [0.3216 0.8902 1];
-            app.AboutButton.Position = [505 79 107 91];
+            app.AboutButton.Position = [510 79 107 91];
             app.AboutButton.Text = '';
 
             % Create ImageEditorButton
@@ -130,7 +130,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.ImageEditorButton.Icon = 'EditImages.PNG';
             app.ImageEditorButton.IconAlignment = 'center';
             app.ImageEditorButton.BackgroundColor = [0.3216 0.8902 1];
-            app.ImageEditorButton.Position = [34 79 107 91];
+            app.ImageEditorButton.Position = [39 79 107 91];
             app.ImageEditorButton.Text = '';
 
             % Create ExamplesButton
@@ -139,7 +139,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.ExamplesButton.Icon = 'Capture.PNG';
             app.ExamplesButton.IconAlignment = 'center';
             app.ExamplesButton.BackgroundColor = [0.3216 0.8902 1];
-            app.ExamplesButton.Position = [191 79 107 91];
+            app.ExamplesButton.Position = [192 79 107 91];
             app.ExamplesButton.Text = '';
 
             % Create UserManualButton
@@ -148,7 +148,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.UserManualButton.Icon = 'UserManual.PNG';
             app.UserManualButton.IconAlignment = 'center';
             app.UserManualButton.BackgroundColor = [0.3216 0.8902 1];
-            app.UserManualButton.Position = [348 79 107 91];
+            app.UserManualButton.Position = [349 79 107 91];
             app.UserManualButton.Text = '';
 
             % Create StartButton
@@ -217,7 +217,7 @@ classdef HomeScreen_exported < matlab.apps.AppBase
             app.Splash = uiimage(app.WaterLabDevelopmentBuildUIFigure);
             app.Splash.ScaleMethod = 'fill';
             app.Splash.ImageClickedFcn = createCallbackFcn(app, @SplashClicked, true);
-            app.Splash.Position = [1 1 798 601];
+            app.Splash.Position = [3 3 798 601];
             app.Splash.ImageSource = 'splash.gif';
 
             % Show the figure after all components are created

@@ -3,10 +3,8 @@ classdef About_exported < matlab.apps.AppBase
     % Properties that correspond to app components
     properties (Access = public)
         UIFigure    matlab.ui.Figure
-        Background  matlab.ui.control.Image
         Label       matlab.ui.control.Label
         AboutLabel  matlab.ui.control.Label
-        Image       matlab.ui.control.Image
     end
 
     % Component initialization
@@ -19,12 +17,6 @@ classdef About_exported < matlab.apps.AppBase
             app.UIFigure = uifigure('Visible', 'off');
             app.UIFigure.Position = [100 100 190 218];
             app.UIFigure.Name = 'MATLAB App';
-
-            % Create Background
-            app.Background = uiimage(app.UIFigure);
-            app.Background.ScaleMethod = 'fill';
-            app.Background.Position = [1 1 196 218];
-            app.Background.ImageSource = 'bg.PNG';
 
             % Create Label
             app.Label = uilabel(app.UIFigure);
@@ -39,11 +31,6 @@ classdef About_exported < matlab.apps.AppBase
             app.AboutLabel.FontSize = 30;
             app.AboutLabel.Position = [56 180 84 36];
             app.AboutLabel.Text = 'About';
-
-            % Create Image
-            app.Image = uiimage(app.UIFigure);
-            app.Image.Position = [1 180 39 39];
-            app.Image.ImageSource = 'About.PNG';
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';

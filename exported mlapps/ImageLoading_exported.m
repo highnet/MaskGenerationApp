@@ -4,7 +4,6 @@ classdef ImageLoading_exported < matlab.apps.AppBase
     properties (Access = public)
         UIFigure           matlab.ui.Figure
         FileMenu           matlab.ui.container.Menu
-        Background         matlab.ui.control.Image
         LoadPNGButton      matlab.ui.control.Button
         Image              matlab.ui.control.Image
         NextButton         matlab.ui.control.Button
@@ -127,12 +126,6 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             app.FileMenu.Enable = 'off';
             app.FileMenu.Text = 'File';
 
-            % Create Background
-            app.Background = uiimage(app.UIFigure);
-            app.Background.ScaleMethod = 'fill';
-            app.Background.Position = [1 1 800 600];
-            app.Background.ImageSource = 'bg.PNG';
-
             % Create LoadPNGButton
             app.LoadPNGButton = uibutton(app.UIFigure, 'push');
             app.LoadPNGButton.ButtonPushedFcn = createCallbackFcn(app, @LoadPNGButtonPushed, true);
@@ -147,12 +140,11 @@ classdef ImageLoading_exported < matlab.apps.AppBase
             % Create NextButton
             app.NextButton = uibutton(app.UIFigure, 'push');
             app.NextButton.ButtonPushedFcn = createCallbackFcn(app, @NextButtonPushed, true);
-            app.NextButton.Icon = 'Start.PNG';
             app.NextButton.IconAlignment = 'center';
             app.NextButton.BackgroundColor = [0.3216 0.8902 1];
             app.NextButton.FontWeight = 'bold';
             app.NextButton.Position = [694 9 98 60];
-            app.NextButton.Text = '';
+            app.NextButton.Text = {'Next Step'; ''};
 
             % Create locationLabel
             app.locationLabel = uilabel(app.UIFigure);
