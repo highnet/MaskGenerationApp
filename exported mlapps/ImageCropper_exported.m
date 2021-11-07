@@ -4,28 +4,28 @@ classdef ImageCropper_exported < matlab.apps.AppBase
     properties (Access = public)
         UIFigure                     matlab.ui.Figure
         FileMenu                     matlab.ui.container.Menu
-        Image                        matlab.ui.control.Image
-        CropAllImagesButton          matlab.ui.control.Button
-        P1EditFieldLabel             matlab.ui.control.Label
-        P1EditField                  matlab.ui.control.NumericEditField
-        P2EditFieldLabel             matlab.ui.control.Label
-        P2EditField                  matlab.ui.control.NumericEditField
-        P3EditFieldLabel             matlab.ui.control.Label
-        P3EditField                  matlab.ui.control.NumericEditField
-        P4EditFieldLabel             matlab.ui.control.Label
-        P4EditField                  matlab.ui.control.NumericEditField
-        UITable                      matlab.ui.control.Table
-        SelectCropBoxButton          matlab.ui.control.Button
-        Step1aCropImagesLabel        matlab.ui.control.Label
-        LoadPNGButton                matlab.ui.control.Button
-        Label                        matlab.ui.control.Label
-        CropThisImageButton          matlab.ui.control.Button
-        SetManualCropBoxLabel        matlab.ui.control.Label
-        AutoContrastEnhancementButtonGroup  matlab.ui.container.ButtonGroup
-        OffButton                    matlab.ui.control.RadioButton
-        histogramequalizationButton  matlab.ui.control.RadioButton
-        adaptivehistogramequalizationButton  matlab.ui.control.RadioButton
         LoadTIFButton                matlab.ui.control.Button
+        AutoContrastEnhancementButtonGroup  matlab.ui.container.ButtonGroup
+        adaptivehistogramequalizationButton  matlab.ui.control.RadioButton
+        histogramequalizationButton  matlab.ui.control.RadioButton
+        OffButton                    matlab.ui.control.RadioButton
+        SetManualCropBoxLabel        matlab.ui.control.Label
+        CropThisImageButton          matlab.ui.control.Button
+        Label                        matlab.ui.control.Label
+        LoadPNGButton                matlab.ui.control.Button
+        Step1aCropImagesLabel        matlab.ui.control.Label
+        SelectCropBoxButton          matlab.ui.control.Button
+        UITable                      matlab.ui.control.Table
+        P4EditField                  matlab.ui.control.NumericEditField
+        P4EditFieldLabel             matlab.ui.control.Label
+        P3EditField                  matlab.ui.control.NumericEditField
+        P3EditFieldLabel             matlab.ui.control.Label
+        P2EditField                  matlab.ui.control.NumericEditField
+        P2EditFieldLabel             matlab.ui.control.Label
+        P1EditField                  matlab.ui.control.NumericEditField
+        P1EditFieldLabel             matlab.ui.control.Label
+        CropAllImagesButton          matlab.ui.control.Button
+        Image                        matlab.ui.control.Image
     end
 
     

@@ -3,8 +3,8 @@ classdef About_exported < matlab.apps.AppBase
     % Properties that correspond to app components
     properties (Access = public)
         UIFigure    matlab.ui.Figure
-        Label       matlab.ui.control.Label
         AboutLabel  matlab.ui.control.Label
+        Label       matlab.ui.control.Label
     end
 
     % Component initialization

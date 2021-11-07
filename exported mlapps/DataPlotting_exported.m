@@ -4,9 +4,9 @@ classdef DataPlotting_exported < matlab.apps.AppBase
     properties (Access = public)
         UIFigure                  matlab.ui.Figure
         FileMenu                  matlab.ui.container.Menu
-        UITable                   matlab.ui.control.Table
-        Step4PlottheresultsLabel  matlab.ui.control.Label
         PlotDataButton            matlab.ui.control.Button
+        Step4PlottheresultsLabel  matlab.ui.control.Label
+        UITable                   matlab.ui.control.Table
         UIAxes                    matlab.ui.control.UIAxes
     end
 
@@ -71,6 +71,14 @@ classdef DataPlotting_exported < matlab.apps.AppBase
             app.FileMenu.Enable = 'off';
             app.FileMenu.Text = 'File';
 
+            % Create UIAxes
+            app.UIAxes = uiaxes(app.UIFigure);
+            title(app.UIAxes, 'Title')
+            xlabel(app.UIAxes, 'X')
+            ylabel(app.UIAxes, 'Y')
+            zlabel(app.UIAxes, 'Z')
+            app.UIAxes.Position = [69 249 511 227];
+
             % Create UITable
             app.UITable = uitable(app.UIFigure);
             app.UITable.ColumnName = {'Name'; 'Year'; 'Size'};
@@ -87,14 +95,6 @@ classdef DataPlotting_exported < matlab.apps.AppBase
             app.PlotDataButton.ButtonPushedFcn = createCallbackFcn(app, @PlotDataButtonPushed, true);
             app.PlotDataButton.Position = [272 13 100 22];
             app.PlotDataButton.Text = 'Plot Data';
-
-            % Create UIAxes
-            app.UIAxes = uiaxes(app.UIFigure);
-            title(app.UIAxes, 'Title')
-            xlabel(app.UIAxes, 'X')
-            ylabel(app.UIAxes, 'Y')
-            zlabel(app.UIAxes, 'Z')
-            app.UIAxes.Position = [69 249 511 227];
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';

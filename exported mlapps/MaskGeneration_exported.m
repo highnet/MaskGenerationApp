@@ -4,32 +4,32 @@ classdef MaskGeneration_exported < matlab.apps.AppBase
     properties (Access = public)
         UIFigure                 matlab.ui.Figure
         FileMenu                 matlab.ui.container.Menu
-        CompositeImageLabel      matlab.ui.control.Label
-        MaskedImageLabel         matlab.ui.control.Label
-        OriginalImageLabel       matlab.ui.control.Label
-        Image3                   matlab.ui.control.Image
-        Image2                   matlab.ui.control.Image
-        SaveMaskButton           matlab.ui.control.Button
-        UITable                  matlab.ui.control.Table
-        NextStepButton           matlab.ui.control.Button
-        PrevButton               matlab.ui.control.Button
-        NextButton               matlab.ui.control.Button
-        ImageCounterLabel        matlab.ui.control.Label
-        Image                    matlab.ui.control.Image
-        Step3GenerateMasksLabel  matlab.ui.control.Label
-        ManualThresholdPanel     matlab.ui.container.Panel
-        ManualThresholdLabel     matlab.ui.control.Label
-        Slider                   matlab.ui.control.Slider
-        FlipMaskButton           matlab.ui.control.Button
-        OtsuThresholdPanel       matlab.ui.container.Panel
-        RegionGrowingPanel       matlab.ui.container.Panel
-        RegionGrowingLabel       matlab.ui.control.Label
-        GrowNewRegionButton      matlab.ui.control.Button
-        MorphologyPanel          matlab.ui.container.Panel
-        MorphButton              matlab.ui.control.Button
+        EdgeDetectionPanel       matlab.ui.container.Panel
         ConnectedComponentLabelingPanel  matlab.ui.container.Panel
         CCLButton                matlab.ui.control.Button
-        EdgeDetectionPanel       matlab.ui.container.Panel
+        MorphologyPanel          matlab.ui.container.Panel
+        MorphButton              matlab.ui.control.Button
+        RegionGrowingPanel       matlab.ui.container.Panel
+        GrowNewRegionButton      matlab.ui.control.Button
+        RegionGrowingLabel       matlab.ui.control.Label
+        OtsuThresholdPanel       matlab.ui.container.Panel
+        ManualThresholdPanel     matlab.ui.container.Panel
+        FlipMaskButton           matlab.ui.control.Button
+        Slider                   matlab.ui.control.Slider
+        ManualThresholdLabel     matlab.ui.control.Label
+        Step3GenerateMasksLabel  matlab.ui.control.Label
+        Image                    matlab.ui.control.Image
+        ImageCounterLabel        matlab.ui.control.Label
+        NextButton               matlab.ui.control.Button
+        PrevButton               matlab.ui.control.Button
+        NextStepButton           matlab.ui.control.Button
+        UITable                  matlab.ui.control.Table
+        SaveMaskButton           matlab.ui.control.Button
+        Image2                   matlab.ui.control.Image
+        Image3                   matlab.ui.control.Image
+        OriginalImageLabel       matlab.ui.control.Label
+        MaskedImageLabel         matlab.ui.control.Label
+        CompositeImageLabel      matlab.ui.control.Label
     end
 
     

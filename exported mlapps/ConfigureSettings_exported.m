@@ -4,24 +4,24 @@ classdef ConfigureSettings_exported < matlab.apps.AppBase
     properties (Access = public)
         WaterlabUIFigure          matlab.ui.Figure
         FileMenu                  matlab.ui.container.Menu
-        NextButton                matlab.ui.control.Button
-        ButtonGroup               matlab.ui.container.ButtonGroup
-        ManualThresholdingButton  matlab.ui.control.RadioButton
-        OtsusThresholdingButton   matlab.ui.control.RadioButton
-        RegionGrowingButton       matlab.ui.control.RadioButton
-        EdgeDetectionButton       matlab.ui.control.RadioButton
-        LocationLabel             matlab.ui.control.Label
-        LocationEditField         matlab.ui.control.EditField
-        PixelSizeEditFieldLabel   matlab.ui.control.Label
-        PixelSizeEditField        matlab.ui.control.EditField
-        CoordinatesLabel          matlab.ui.control.Label
-        CoordinatesEditField      matlab.ui.control.EditField
-        NameLabel                 matlab.ui.control.Label
-        NameEditField             matlab.ui.control.EditField
-        m2Label                   matlab.ui.control.Label
-        ImageBandLabel            matlab.ui.control.Label
-        ImageBandEditField        matlab.ui.control.EditField
         SegmentationMethodLabel   matlab.ui.control.Label
+        ImageBandEditField        matlab.ui.control.EditField
+        ImageBandLabel            matlab.ui.control.Label
+        m2Label                   matlab.ui.control.Label
+        NameEditField             matlab.ui.control.EditField
+        NameLabel                 matlab.ui.control.Label
+        CoordinatesEditField      matlab.ui.control.EditField
+        CoordinatesLabel          matlab.ui.control.Label
+        PixelSizeEditField        matlab.ui.control.EditField
+        PixelSizeEditFieldLabel   matlab.ui.control.Label
+        LocationEditField         matlab.ui.control.EditField
+        LocationLabel             matlab.ui.control.Label
+        ButtonGroup               matlab.ui.container.ButtonGroup
+        EdgeDetectionButton       matlab.ui.control.RadioButton
+        RegionGrowingButton       matlab.ui.control.RadioButton
+        OtsusThresholdingButton   matlab.ui.control.RadioButton
+        ManualThresholdingButton  matlab.ui.control.RadioButton
+        NextButton                matlab.ui.control.Button
     end
 
     % Callbacks that handle component events

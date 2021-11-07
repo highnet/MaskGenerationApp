@@ -6,21 +6,21 @@ classdef HomeScreen_exported < matlab.apps.AppBase
         FileMenu           matlab.ui.container.Menu
         NewMenu            matlab.ui.container.Menu
         ExitMenu           matlab.ui.container.Menu
-        Background         matlab.ui.control.Image
-        GetImagesButton    matlab.ui.control.Button
-        AboutButton        matlab.ui.control.Button
-        ImageEditorButton  matlab.ui.control.Button
-        ExamplesButton     matlab.ui.control.Button
-        UserManualButton   matlab.ui.control.Button
-        StartButton        matlab.ui.control.Button
-        UserManualLabel    matlab.ui.control.Label
-        ImageEditorLabel   matlab.ui.control.Label
-        ExamplesLabel      matlab.ui.control.Label
-        GetImagesLabel     matlab.ui.control.Label
-        AboutLabel         matlab.ui.control.Label
-        StartLabel         matlab.ui.control.Label
-        Title              matlab.ui.control.Image
         Splash             matlab.ui.control.Image
+        Title              matlab.ui.control.Image
+        StartLabel         matlab.ui.control.Label
+        AboutLabel         matlab.ui.control.Label
+        GetImagesLabel     matlab.ui.control.Label
+        ExamplesLabel      matlab.ui.control.Label
+        ImageEditorLabel   matlab.ui.control.Label
+        UserManualLabel    matlab.ui.control.Label
+        StartButton        matlab.ui.control.Button
+        UserManualButton   matlab.ui.control.Button
+        ExamplesButton     matlab.ui.control.Button
+        ImageEditorButton  matlab.ui.control.Button
+        AboutButton        matlab.ui.control.Button
+        GetImagesButton    matlab.ui.control.Button
+        Background         matlab.ui.control.Image
     end
 
     % Callbacks that handle component events

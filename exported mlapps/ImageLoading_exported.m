@@ -4,17 +4,17 @@ classdef ImageLoading_exported < matlab.apps.AppBase
     properties (Access = public)
         UIFigure           matlab.ui.Figure
         FileMenu           matlab.ui.container.Menu
-        LoadPNGButton      matlab.ui.control.Button
-        Image              matlab.ui.control.Image
-        NextButton         matlab.ui.control.Button
-        locationLabel      matlab.ui.control.Label
-        pixelSizeLabel     matlab.ui.control.Label
-        MethodLabel        matlab.ui.control.Label
-        UITable            matlab.ui.control.Table
-        RemoveImageButton  matlab.ui.control.Button
-        NameLabel          matlab.ui.control.Label
-        CoordinatesLabel   matlab.ui.control.Label
         ImageBandLabel     matlab.ui.control.Label
+        CoordinatesLabel   matlab.ui.control.Label
+        NameLabel          matlab.ui.control.Label
+        RemoveImageButton  matlab.ui.control.Button
+        UITable            matlab.ui.control.Table
+        MethodLabel        matlab.ui.control.Label
+        pixelSizeLabel     matlab.ui.control.Label
+        locationLabel      matlab.ui.control.Label
+        NextButton         matlab.ui.control.Button
+        Image              matlab.ui.control.Image
+        LoadPNGButton      matlab.ui.control.Button
     end
 
     
