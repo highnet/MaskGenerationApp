@@ -6,5 +6,6 @@
             end
             
                 image = imcrop(image,[P1 P2 P3 P4]); % crop the image within the cropping box
+                image = histeq(image);
                 imwrite(image,strcat(selectedDirectory,"\_cropped.png")); % save the image on the chosen directory
        end
