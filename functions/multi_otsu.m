@@ -1,0 +1,38 @@
+function result = multi_otsu(images, flipped)
+
+numberOfImages = size(images);
+numberOfImages = numberOfImages(2);
+
+masks = cell(1,numberOfImages);
+
+for j = 1:numberOfImages
+    maskedImage = rgb2gray(images{1,j});
+
+    top = 256;
+    maximumInterClassVariance = 0.0;
+
+    for i = 1:top
+        foreGroundPixels = maskedImage >= i;
+        backGroundPixels = ~foreGroundPixels;
+
+        numberOfPixelsInForeground = sum(foreGroundPixels(:) == 1);
+        meanIntensityOfForeground = mean(maskedImage(maskedImage >= i));
+
+        numberOfPixelsInBackground = sum(backGroundPixels(:) == 1);
+        meanIntensityOfBackground = mean(maskedImage(maskedImage < i));
+
+        interClassVariance = numberOfPixelsInBackground * numberOfPixelsInForeground * (meanIntensityOfBackground - meanIntensityOfForeground)^2;
+
+        if (interClassVariance >= maximumInterClassVariance)
+            level = i;
+            maximumInterClassVariance = interClassVariance;
+        end
+    end
+    maskedImage = rgb2gray(images{1,j}) <= level; % compute a binary mask
+    if flipped == 1
+        maskedImage = ~maskedImage;
+    end
+    masks{1,j} = maskedImage;
+end
+result = masks;
+end
