@@ -6,20 +6,20 @@ numberOfImages = numberOfImages(2);
 masks = cell(1,numberOfImages);
 
 for j = 1:numberOfImages
-    maskedImage = rgb2gray(images{1,j});
-
+    
+    grayImage = rgb2gray(images{1,j});
     top = 256;
     maximumInterClassVariance = 0.0;
 
     for i = 1:top
-        foreGroundPixels = maskedImage >= i;
+        foreGroundPixels = grayImage >= i;
         backGroundPixels = ~foreGroundPixels;
 
         numberOfPixelsInForeground = sum(foreGroundPixels(:) == 1);
-        meanIntensityOfForeground = mean(maskedImage(maskedImage >= i));
+        meanIntensityOfForeground = mean(grayImage(foreGroundPixels));
 
         numberOfPixelsInBackground = sum(backGroundPixels(:) == 1);
-        meanIntensityOfBackground = mean(maskedImage(maskedImage < i));
+        meanIntensityOfBackground = mean(grayImage(backGroundPixels));
 
         interClassVariance = numberOfPixelsInBackground * numberOfPixelsInForeground * (meanIntensityOfBackground - meanIntensityOfForeground)^2;
 
@@ -28,7 +28,7 @@ for j = 1:numberOfImages
             maximumInterClassVariance = interClassVariance;
         end
     end
-    maskedImage = rgb2gray(images{1,j}) <= level; % compute a binary mask
+    maskedImage = grayImage <= level; % compute a binary mask
     if flipped == 1
         maskedImage = ~maskedImage;
     end

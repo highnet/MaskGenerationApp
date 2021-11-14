@@ -1,19 +1,18 @@
         function result = otsu(image, flipped)
             
-            maskedImage = rgb2gray(image); 
-            
+            grayImage = rgb2gray(image); 
             top = 256;
             maximumInterClassVariance = 0.0;
             
             for i = 1:top
-                foreGroundPixels = maskedImage >= i;
+                foreGroundPixels = grayImage >= i;
                 backGroundPixels = ~foreGroundPixels;
                 
                 numberOfPixelsInForeground = sum(foreGroundPixels(:) == 1);
-                meanIntensityOfForeground = mean(maskedImage(maskedImage >= i));
+                meanIntensityOfForeground = mean(grayImage(foreGroundPixels));
                 
                 numberOfPixelsInBackground = sum(backGroundPixels(:) == 1);
-                meanIntensityOfBackground = mean(maskedImage(maskedImage < i));
+                meanIntensityOfBackground = mean(grayImage(backGroundPixels));
                 
                 interClassVariance = numberOfPixelsInBackground * numberOfPixelsInForeground * (meanIntensityOfBackground - meanIntensityOfForeground)^2;
                 
@@ -22,7 +21,7 @@
                     maximumInterClassVariance = interClassVariance;
                 end
             end
-              maskedImage = rgb2gray(image) <= level; % compute a binary mask
+              maskedImage = grayImage <= level;
             if flipped == 1
                 maskedImage = ~maskedImage;
             end
