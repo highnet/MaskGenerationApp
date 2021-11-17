@@ -1,11 +1,9 @@
 ===Main Methods===
-
 region_growing.m (Max P)
 connected_component_labeling.m (Svet)
 multi_connected_component_labeling.m (Svet)
 distance_transform.m (Sergej)
 multi_distance_transform.m (Sergej)
-
 mask_to_width.m (Requires CCL & DT)
 multi_mask_to_width.m (Requires CCL & DT)
 display_widths.m (Requires multi_mask_to_width)
