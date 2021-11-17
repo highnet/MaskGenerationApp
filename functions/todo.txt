@@ -10,7 +10,6 @@ mask_to_width.m (Requires CCL & DT)
 multi_mask_to_width.m (Requires CCL & DT)
 display_widths.m (Requires multi_mask_to_width)
 
-
 ===Pre-Processing Methods===
 multi_crop_image.m
 crop_image.m
