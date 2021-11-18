@@ -6,7 +6,7 @@ function result = multi_connected_component_labeling(images, conn)
     masks = cell(1,numberOfImages);
 
     for i = 1:numberOfImages
-        grayImage = rgb2gray(images{1,i})
+        grayImage = images{1,i};
         
         switch conn
             case 4
