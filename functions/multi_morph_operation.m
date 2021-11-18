@@ -21,6 +21,7 @@ function result = multi_morph_operation(images, type, SE)
                 maskedImage = image;
         end
         masks(1, i) = maskedImage;
+        
     end
     result = masks;
 end
