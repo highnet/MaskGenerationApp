@@ -6,7 +6,7 @@ function result = multi_morph_operation(images, type, SE)
     masks = cell(1,numberOfImages);
 
     for i = 1:numberOfImages
-        grayImage = rgb2gray(images);
+        grayImage = rgb2gray(images{1,j});
 
         switch type
             case "erode"
