@@ -1,7 +1,5 @@
 function result = connected_component_labeling(image, conn)
 
-    grayImage = rgb2gray(image);
-
     switch conn
         case 4
             result = bwlabel(grayImage, 4);
