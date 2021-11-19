@@ -26,10 +26,3 @@ output/masks/*
 Images For Testing.zip
 
 # exclude everything inside the output folder, with an exception to the rule
-
-output/*
-!output/.gitkeep 
-
-input/*
-!input/.gitkeep
-
