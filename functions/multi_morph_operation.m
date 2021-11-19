@@ -1,12 +1,12 @@
-function result = multi_morph_operation(images, type, SE)
+function result = multi_morph_operation(masks, type, SE)
 
-    numberOfImages = size(images);
+    numberOfImages = size(masks);
     numberOfImages = numberOfImages(2);
 
-    masks = cell(1,numberOfImages);
+    morphs = cell(1,numberOfImages);
 
     for i = 1:numberOfImages
-        grayImage = images{1,i};
+        grayImage = masks{1,i};
 
         switch type
             case "erode"
@@ -20,8 +20,8 @@ function result = multi_morph_operation(images, type, SE)
             otherwise
                 maskedImage = image;
         end
-        masks(1, i) = maskedImage;
+        morphs(1, i) = maskedImage;
         
     end
-    result = masks;
+    result = morphs;
 end
