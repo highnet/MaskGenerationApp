@@ -1,21 +1,21 @@
-function result = multi_connected_component_labeling(images, conn)
+function result = multi_connected_component_labeling(masks, conn)
 
-    numberOfImages = size(images);
+    numberOfImages = size(masks);
     numberOfImages = numberOfImages(2);
 
-    masks = cell(1,numberOfImages);
+    components = cell(1,numberOfImages);
 
     for i = 1:numberOfImages
-        grayImage = images{1,i};
+        mask = masks{1,i};
         
         switch conn
             case 4
-                maskedImage = bwlabel(grayImage, 4);
+                maskedImage = bwlabel(mask, 4);
             otherwise
-                maskedImage = bwlabel(grayImage, 8);
+                maskedImage = bwlabel(mask, 8);
         end
-        masks(1, i) = maskedImage;
+        components(1, i) = maskedImage;
         
     end
-    result = masks;
+    result = components;
 end
