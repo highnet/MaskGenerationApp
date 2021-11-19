@@ -6,21 +6,21 @@ function result = multi_morph_operation(masks, type, SE)
     morphs = cell(1,numberOfImages);
 
     for i = 1:numberOfImages
-        grayImage = masks{1,i};
+        mask = masks{1,i};
 
         switch type
             case "erode"
-                maskedImage = imerode(grayImage, SE);
+                morphedImage = imerode(mask, SE);
             case "dilate"
-                maskedImage = imdilate(grayImage, SE);
+                morphedImage = imdilate(mask, SE);
             case "open"
-                maskedImage = imopen(grayImage, SE);
+                morphedImage = imopen(mask, SE);
             case "close"
-                maskedImage = imclose(grayImage, SE);
+                morphedImage = imclose(mask, SE);
             otherwise
-                maskedImage = image;
+                morphedImage = mask;
         end
-        morphs(1, i) = maskedImage;
+        morphs(1, i) = morphedImage;
         
     end
     result = morphs;
