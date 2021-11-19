@@ -1,15 +1,15 @@
-function result = morph_operation(image, type, SE)
+function result = morph_operation(mask, type, SE)
 
     switch type
         case "erode"
-            result = imerode(grayImage, SE);
+            result = imerode(mask, SE);
         case "dilate"
-            result = imdilate(grayImage, SE);
+            result = imdilate(mask, SE);
         case "open"
-            result = imopen(grayImage, SE);
+            result = imopen(mask, SE);
         case "close"
-            result = imclose(grayImage, SE);
+            result = imclose(mask, SE);
         otherwise
-            result = image;
+            result = mask;
     end
 end
