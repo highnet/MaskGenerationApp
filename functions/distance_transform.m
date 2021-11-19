@@ -1,6 +1,8 @@
 function [thickness] = distance_transform(img)
 % Find all unique river channels and assign them an ID
-[label,N] = bwlabel(img);
+Img=img;
+bwImg=im2bw(Img, 0.45);
+[label,N] = bwlabel(bwImg);
 
 % Initialize an array that determines the width
 thickness = zeros(N,1);
@@ -19,7 +21,7 @@ for index = 1 : N
 
     % the following bit is me testing the code, it should show thw width at
     % each point, cant figure it out quite good enough for now
-% imshow(im); hold on;
+% imshow(bwImg); hold on;
 % for index = 1 : N
 %     [y,x]= find(label == index);
 %     center = mean([x y]);
