@@ -1,9 +1,9 @@
-function result = connected_component_labeling(image, conn)
+function result = connected_component_labeling(mask, conn)
 
     switch conn
         case 4
-            result = bwlabel(grayImage, 4);
+            result = bwlabel(mask, 4);
         otherwise
-            result = bwlabel(grayImage, 8);
+            result = bwlabel(mask, 8);
     end
 end
