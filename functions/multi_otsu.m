@@ -1,3 +1,12 @@
+% Returns 
+% inputs: 
+%  
+% 
+
+% outputs: 
+%
+%
+
 function result = multi_otsu(images, flipped)
 
 numberOfImages = size(images);
