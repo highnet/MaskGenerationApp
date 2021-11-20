@@ -1,3 +1,4 @@
+% Author: Joaquin Telleria (01408189)
 % Given an image, return a mask of the image generated with Otsu's method.
 % inputs:
 % image: The image to be masked.
