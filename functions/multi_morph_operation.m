@@ -1,3 +1,12 @@
+% Returns 
+% inputs: 
+%  
+% 
+
+% outputs: 
+%
+%
+
 function result = multi_morph_operation(masks, type, SE)
 
     numberOfImages = size(masks);
