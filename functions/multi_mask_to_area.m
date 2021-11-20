@@ -10,15 +10,15 @@
 
 function result = multi_mask_to_area(masks,spatial_resolution_meters)
 
-numberOfMasks = size(masks);
-numberOfMasks = numberOfMasks(2);
+numberOfMasks = size(masks); % count how many images are in the masks cell 1/2
+numberOfMasks = numberOfMasks(2); % count how many images are in the masks cell 2/2
 
-areas = cell(1,numberOfMasks);
+areas = cell(1,numberOfMasks); % create an empty [1xN] cell, where N is the number of masks inputted
 
-for i = 1:numberOfMasks
-    areas{1,i} = sum(masks{1,i}(:)) * spatial_resolution_meters;
+for i = 1:numberOfMasks % iterate through every inputted mask
+    areas{1,i} = sum(masks{1,i}(:)) * spatial_resolution_meters; % Fetch the mask, multiply the count of foreground pixels (==1) with the spatial resolution in meters and store it in the areas cell
 end
 
-result = areas;
+result = areas; % return the areas cell
 
 end
