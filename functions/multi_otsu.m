@@ -1,11 +1,11 @@
-% Returns 
-% inputs: 
-%  
-% 
+% Author: Joaquin Telleria (01408189)
+% Given a cell of images, return a cell of masks of each image generated with Otsu's method.
+% inputs:
+% images: A cell of images to be masked.
+% flipped: Whether the mask should be flipped or not.
 
-% outputs: 
-%
-%
+% outputs:
+% result: A cell of masks, whereby each input image has been masked using Otu's method.
 
 function result = multi_otsu(images, flipped)
 
