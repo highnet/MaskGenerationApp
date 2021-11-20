@@ -1,3 +1,12 @@
+% Returns 
+% inputs: 
+%  
+% 
+
+% outputs: 
+%
+%
+
         function result = otsu(image, flipped)
             
             grayImage = rgb2gray(image); 
@@ -27,4 +36,3 @@
             end
               result = maskedImage;
         end
-       
