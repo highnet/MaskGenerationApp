@@ -1,3 +1,12 @@
+% Returns 
+% inputs: 
+%  
+% 
+
+% outputs: 
+%
+%
+
 function result = multi_connected_component_labeling(masks, conn)
 
     numberOfImages = size(masks);
