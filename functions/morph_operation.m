@@ -1,3 +1,12 @@
+% Returns 
+% inputs: 
+%  
+% 
+
+% outputs: 
+%
+%
+
 function result = morph_operation(mask, type, SE)
 
     switch type
