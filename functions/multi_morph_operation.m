@@ -29,7 +29,7 @@ function result = multi_morph_operation(masks, type, SE)
             otherwise
                 morphedImage = mask;
         end
-        morphs(1, i) = morphedImage;
+        morphs{1, i} = morphedImage;
         
     end
     result = morphs;
