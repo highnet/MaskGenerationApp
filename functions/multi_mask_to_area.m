@@ -5,7 +5,7 @@
 % spatial_resolution_meters: The spatial resolution of the satellite image,  1 pixel = spatial_resolution_meters squared meters.
 
 % outputs: masks
-% result: A [1xN] cell of areas, each cell contains the area of foreground pixels of each input image.
+% result: A [1xN] cell of areas, each area is a [1x1] matrix containing a single value of the area of foreground pixels of each input image.
 
 
 function result = multi_mask_to_area(masks,spatial_resolution_meters)
