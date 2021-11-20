@@ -1,3 +1,12 @@
+% Returns 
+% inputs: 
+%  
+% 
+
+% outputs: 
+%
+%
+
 function plot_areas(areas,location)
 
 numberOfAreas = size(areas);
