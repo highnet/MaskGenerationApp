@@ -1,3 +1,12 @@
+% Returns 
+% inputs: 
+%  
+% 
+
+% outputs: 
+%
+%
+
 function result = multi_mask_to_area(masks,spatial_resolution_meters)
 
 numberOfMasks = size(masks);
