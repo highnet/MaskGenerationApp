@@ -8,8 +8,8 @@
 
 function result = mask_to_area(mask,spatial_resolution_meters)
 
-area = sum(mask(:)) * spatial_resolution_meters; % Multiply the count of foreground pixels (==1) with the spatial resolution in meters.
+area = sum(mask(:)) * spatial_resolution_meters; % Multiply the count of foreground pixels (==1) with the spatial resolution in meters
 
-result = area; % return the result.
+result = area; % return the result
 
 end
