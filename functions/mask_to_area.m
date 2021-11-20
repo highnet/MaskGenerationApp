@@ -1,3 +1,4 @@
+% Author: Joaquin Telleria (01408189)
 % Given a mask, returns the area (in squared meters) of foreground pixels (==1).
 % inputs:
 % mask: A logical matrix, whereby water pixels are foreground pixels (==1).
