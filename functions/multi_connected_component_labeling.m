@@ -23,7 +23,7 @@ function result = multi_connected_component_labeling(masks, conn)
             otherwise
                 maskedImage = bwlabel(mask, 8);
         end
-        components(1, i) = maskedImage;
+        components{1, i} = maskedImage;
         
     end
     result = components;
