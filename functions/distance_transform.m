@@ -32,7 +32,7 @@ for index = 1 : N
     component = label == index;  
     d = bwdist(component); % apply distance transform 
     maxDistance = max(d(:)); % Get the maximum distance to the edge
-    maxDistances=cat(1,maxDistances, maxDistance);
+    maxDistances=cat(2,maxDistances, maxDistance);
 end
     
 temp=bwdist(bwImg);
