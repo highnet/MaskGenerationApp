@@ -1,6 +1,5 @@
 ===Main Methods===
-distance_transform.m (Sergej)
-multi_distance_transform.m (Sergej)
+
 mask_to_width.m
 multi_mask_to_width.m
 display_widths.m (Requires multi_mask_to_width)
