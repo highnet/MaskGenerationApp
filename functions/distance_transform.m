@@ -38,6 +38,3 @@ end
 temp=bwdist(bwImg);
 dAtCords=temp(coordinates(1),coordinates(2));
 end
-
-
-
