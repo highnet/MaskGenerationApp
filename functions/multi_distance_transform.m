@@ -1,4 +1,4 @@
-function [allMaxDistances, allDAtCords] = multi_distance_transform(masks, CCMs, x, y)
+function [allMaxDistances, allDAtCords,allRiverSizes, allDistances] = multi_distance_transform(masks, CCMs, x, y)
 %masks are all processed images of a certain body of water
 %CCMs are respective connected component masks
 
