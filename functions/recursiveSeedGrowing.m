@@ -24,28 +24,28 @@ function [temp_maskedImage] = recursiveSeedGrowing(image, similarity, seed, mask
                         sum(image(seedX+1, seedY, :) - colorValue) >= -similarity*2) %filter by color, using the similarity value
                     newSeed = seed;
                     newSeed(1, 2) = newSeed(1, 2) +1; 
-                    temp_maskedImage = recursiveSeedGrowing(image, similarity, newSeed, mask); %recursive call on shifted seed
+                    temp_maskedImage = recursiveSeedGrowing(image, similarity, newSeed, temp_maskedImage); %recursive call on shifted seed
                 end
                 if(temp_maskedImage(seedX-1, seedY, :) == 0 && ... %check the pixel below
                         sum(image(seedX-1, seedY, :) - colorValue) <= similarity*2 && ...
                         sum(image(seedX-1, seedY, :) - colorValue) >= -similarity*2) %filter by color, using the similarity value
                     newSeed = seed;
                     newSeed(1, 2) = newSeed(1, 2) -1;
-                    temp_maskedImage = recursiveSeedGrowing(image, similarity, newSeed, mask); %recursive call on shifted seed
+                    temp_maskedImage = recursiveSeedGrowing(image, similarity, newSeed, temp_maskedImage); %recursive call on shifted seed
                 end
                 if(temp_maskedImage(seedX, seedY+1, :) == 0 && ... %check the pixel to the right
                         sum(image(seedX, seedY+1, :) - colorValue) <= similarity*2 && ...
                         sum(image(seedX, seedY+1, :) - colorValue) >= -similarity*2) %filter by color, using the similarity value
                     newSeed = seed;
                     newSeed(1, 1) = newSeed(1, 1) +1;
-                    temp_maskedImage = recursiveSeedGrowing(image, similarity, newSeed, mask);  %recursive call on shifted seed
+                    temp_maskedImage = recursiveSeedGrowing(image, similarity, newSeed, temp_maskedImage);  %recursive call on shifted seed
                 end
                 if(temp_maskedImage(seedX, seedY-1, :) == 0 && ... %check the pixel to the left
                         sum(image(seedX, seedY-1, :) - colorValue) <= similarity*2 && ...
                         sum(image(seedX, seedY-1, :) - colorValue) >= -similarity*2) %filter by color, using the similarity value
                     newSeed = seed;
                     newSeed(1, 1) = newSeed(1, 1) -1;
-                    temp_maskedImage = recursiveSeedGrowing(image, similarity, newSeed, mask); %recursive call on shifted seed 
+                    temp_maskedImage = recursiveSeedGrowing(image, similarity, newSeed, temp_maskedImage); %recursive call on shifted seed 
                 end
                 
 

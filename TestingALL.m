@@ -1,10 +1,18 @@
 
-img=imread('LandsatInput2.png');
+img=imread('LandsatInput5.png');
 grayscale=im2gray(img);
 
-%outpu:binary image with otsu applied
+scaledImg=imread('LandsatInput5Downscaled.png');
+
+%output: binary image with region growing applied
+%Note: for now, a downscaled image is used, as the performance of the
+%region growing algorithm has yet to be improved.
+regionGrowingImg = regionGrowing(scaledImg, 0, 1);
+imshow(regionGrowingImg);
+
+%output: binary image with otsu applied
 otsuImg=otsu(img, 1);
-%imshow(otsuImg);
+imshow(otsuImg);
 
 %applying the morphological functions 
 %///////////////////////////////////
@@ -22,7 +30,7 @@ erodedImg=morph_operation(otsuImg, 'erode',erodElement);
 
 dilationElement = strel('disk',5);
 dilatedImg=morph_operation(erodedImg, 'dilate',dilationElement);
-%figure,imshow(dilatedImg);
+figure,imshow(dilatedImg);
 
 [label, N]=connected_component_labeling(~dilatedImg,8);
 
@@ -46,7 +54,7 @@ for labelIndex=1:N
         break;
     end
 end
-%imshow(label==labelIndex);
+figure, imshow(label==labelIndex);
 
 
 
