@@ -3,7 +3,7 @@
 %growing is being done in the recursiveSeedGrowing function
 function [result] = regionGrowing(image, mask, similarity)
             if(mask == 0)  % if mask is the scalar value 0, it creates an empty mask
-                mask = zeros(size(image));
+                mask = im2gray(zeros(size(image)));
             end
             
             imshow(im2uint8(mask) + image); % show the combined image
@@ -13,8 +13,7 @@ function [result] = regionGrowing(image, mask, similarity)
             catch 
             end
 
-            result = or(mask, recursiveSeedGrowing(image, similarity, seed, mask));
-           % result = or(mask, recursiveSeedGrowing(app, imageIndex, similarity, seed, temp_MaskedImage)); 
+            result = or(mask, recursiveSeedGrowing(image, similarity, seed, mask)); 
             %add newly created mask to the existing mask
 
             imshow(im2uint8(cat(3,result,result,result)) + image); % show the combined image 

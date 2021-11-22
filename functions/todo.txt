@@ -1,10 +1,21 @@
+===Main Methods===
+mask_to_width.m
+multi_mask_to_width.m
+display_widths.m (Requires multi_mask_to_width)
+
 ====Code====
--fix region growing (Max P.)
--add distance transform adn output the data to script (Sergej)
+-add distance transform and output the data to script (Sergej)
 -add the documentation to the script (Sergej)
 ----Apply all to multiple images (All)
 ----Plot the data (all)
 
+===Pre-Processing Methods===
+multi_crop_image.m
+crop_image.m
+multi_contrast_enhancement.m
+contrast_enhancement.m
+multi_convert_landsat_images.m
+convert_landsat_images.m
 ===Presentation===
 -Make the presentation cleaner
 -Add voice-over audio

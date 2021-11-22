@@ -34,7 +34,7 @@ grayscale=im2gray(img);
 
 %----Creating a set of binary images using Otsu's threshold-----
 otsuImg=otsu(img, 1);
-%imshow(otsuImg);
+imshow(otsuImg);
 
 %------Apply the morphological operations------
 %For this we use the disk-shape kernels since they tend to preserve the
@@ -48,7 +48,7 @@ erodedImg=morph_operation(otsuImg, 'erode',erodElement);
 
 dilationElement = strel('disk',5);
 dilatedImg=morph_operation(erodedImg, 'dilate',dilationElement);
-%figure,imshow(dilatedImg);
+figure,imshow(dilatedImg);
 
 %----Conected Component Labeling----
 %
