@@ -21,14 +21,18 @@ numberOfImages=numberOfImages(2);
 %images
 allMaxDistances=[[]];
 allDAtCords=[];
+allRiverSizes=[];
+allDistances=[[[]]];
 
 for i = 1:numberOfImages
     mask = masks{1,i};
     CC=CCMs{1,i};
     [label, N]=bwlabel(CC);
-    [maxDistances, dAtCords]=distance_transform(mask,label, N,x, y);
+    [maxDistances, dAtCords, riverSize, distances]=distance_transform(mask,label, N,x, y);
     allMaxDistances=cat(1,allMaxDistances, maxDistances);
     allDAtCords=cat(2,allDAtCords,dAtCords);
+    allRiverSizes=cat(2,allRiverSizes, riverSize);
+    allDistances=cat(3,allDistances,distances);
 end
 
 end
