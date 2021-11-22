@@ -39,6 +39,11 @@ otsuImg=otsu(img, 1);
 %shape of rivers the best
 %We apply erosion and dilation to remove any loose and stranded pixels that
 %might be miss-enterpeted as a body of water or land
+%
+%NOTE: some of the images like LandsatInput2 will require larger kernels
+%in order to get rid of unwanted artifacts that may be missenterpeted 
+%as rivers/land.
+
 
 erodElement = strel('disk',2);
 erodedImg=morph_operation(otsuImg, 'erode',erodElement);
@@ -53,8 +58,8 @@ dilatedImg=morph_operation(erodedImg, 'dilate',dilationElement);
 %Note: for now, a downscaled image is used, as the performance of the
 %region growing algorithm has yet to be improved.
 %output: binary image with region growing applied
-%scaledImg=imread('LandsatInput5Downscaled.png');
-%regionGrowingImg = regionGrowing(scaledImg, 0, 1);
+scaledImg=imread('LandsatInput5Downscaled.png');
+regionGrowingImg = regionGrowing(scaledImg, 0, 1);
 %figure, imshow(regionGrowingImg), title('Region Grown Image');
 %//////////////////////////////////////////////////////////////////////////
 
