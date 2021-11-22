@@ -46,7 +46,7 @@ end
 
 %component representing the river as a binary image, 
 river=~(label==labelIndex);
-imshow(river);
+%imshow(river);
 
 %Apply distance transform
 distances=bwdist(river);

@@ -23,18 +23,15 @@
 
 
 %img=imread('LandsatInput1.png');
-%img=imread('LandsatInput2.png');
-img=imread('LandsatInput5.png');
+img=imread('LandsatInput2.png');
+%img=imread('LandsatInput5.png');
 %img=imread('LandsatInput6.png');
 %img=imread('LandsatInput7.png');
 %img=imread('LandsatInput8.png');
 
-%----Conversion to the grayscale image----
-grayscale=im2gray(img);
-
 %----Creating a set of binary images using Otsu's threshold-----
 otsuImg=otsu(img, 1);
-imshow(otsuImg);
+%imshow(otsuImg);
 
 %------Apply the morphological operations------
 %For this we use the disk-shape kernels since they tend to preserve the
@@ -42,13 +39,24 @@ imshow(otsuImg);
 %We apply erosion and dilation to remove any loose and stranded pixels that
 %might be miss-enterpeted as a body of water or land
 
-erodElement = strel('disk',3);
+erodElement = strel('disk',2);
 erodedImg=morph_operation(otsuImg, 'erode',erodElement);
 %figure,imshow(erodedImg);
 
-dilationElement = strel('disk',5);
+dilationElement = strel('disk',3);
 dilatedImg=morph_operation(erodedImg, 'dilate',dilationElement);
-figure,imshow(dilatedImg);
+%figure,imshow(dilatedImg), label('Dilated Image');
+
+%///////////--Region Growing--/////////////////
+%doing the region growing for the area that represents the river
+%scaledImg=imread('LandsatInput5Downscaled.png');
+%output: binary image with region growing applied
+%Note: for now, a downscaled image is used, as the performance of the
+%region growing algorithm has yet to be improved.
+%scaledImg=imread('LandsatInput5Downscaled.png');
+%regionGrowingImg = regionGrowing(scaledImg, 0, 1);
+%figure, imshow(regionGrowingImg), title('Region Grown Image');
+%///////////////////////////////////////////////////
 
 %----Conected Component Labeling----
 %
@@ -62,12 +70,17 @@ try seed = ginput(1); % wait for one mouse click
 catch
 end
 %Getting the max width of the river and a distance to edge at user coords
-imshow(label);
+%imshow(label);
 x=int16(seed(1));
 y=int16(seed(2));
 [maxDistance, dAtCords]=distance_transform(img,label,N,x,y);
-
 maxWIdth=2*maxDistance;
+
+for n=1:N
+    
+end
+
+
 
 
 
