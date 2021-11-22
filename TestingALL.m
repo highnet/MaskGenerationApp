@@ -23,13 +23,14 @@
 
 
 %img=imread('LandsatInput1.png');
-img=imread('LandsatInput2.png');
-%img=imread('LandsatInput5.png');
+%img=imread('LandsatInput2.png');
+img=imread('LandsatInput5.png');
 %img=imread('LandsatInput6.png');
 %img=imread('LandsatInput7.png');
 %img=imread('LandsatInput8.png');
+%imshow(img);
 
-%----Creating a set of binary images using Otsu's threshold-----
+%----Creating a binary image using Otsu's threshold-----
 otsuImg=otsu(img, 1);
 %imshow(otsuImg);
 
@@ -47,38 +48,54 @@ dilationElement = strel('disk',3);
 dilatedImg=morph_operation(erodedImg, 'dilate',dilationElement);
 %figure,imshow(dilatedImg), label('Dilated Image');
 
-%///////////--Region Growing--/////////////////
+%///////////--Region Growing--/////////////////////////////////////////////
 %doing the region growing for the area that represents the river
-%scaledImg=imread('LandsatInput5Downscaled.png');
-%output: binary image with region growing applied
 %Note: for now, a downscaled image is used, as the performance of the
 %region growing algorithm has yet to be improved.
+%output: binary image with region growing applied
 %scaledImg=imread('LandsatInput5Downscaled.png');
 %regionGrowingImg = regionGrowing(scaledImg, 0, 1);
 %figure, imshow(regionGrowingImg), title('Region Grown Image');
-%///////////////////////////////////////////////////
+%//////////////////////////////////////////////////////////////////////////
 
 %----Conected Component Labeling----
 %
 %the goal is to group all the regions so that we can single out the bigest
 %ones representing our body of water
 [label, N]=connected_component_labeling(~dilatedImg,8);
+%imshow(label2rgb(label,'jet','k','shuffle'));
+
 
 %Gettign the coordinates in order to visualise the data
-imshow(img); 
+imshow(img); hold on; 
 try seed = ginput(1); % wait for one mouse click
 catch
 end
 %Getting the max width of the river and a distance to edge at user coords
-%imshow(label);
 x=int16(seed(1));
 y=int16(seed(2));
-[maxDistance, dAtCords]=distance_transform(img,label,N,x,y);
+[maxDistance, dAtCords, riverSize, distances]=distance_transform(dilatedImg,label,N,x,y);
 maxWIdth=2*maxDistance;
 
-for n=1:N
-    
-end
+%coordinates of the pixel with the max width.
+[xMax,yMax] = find(distances==maxDistance);
+%Surface area of the river as numvber of pixels times spacial resolution of
+%30m^2 per pixel
+area=riverSize*30;
+
+%formating the output:
+p1 = [xMax,yMax-int16(maxDistance)];
+p2 = [xMax,yMax+int16(maxDistance)];
+text(10,20,['Total surface area of the river: ' num2str(area) ' m^2'],'color', 'yellow', 'FontSize',20);
+plot([p1(2),p2(2)],[p1(1)+15,p2(1)],'Color','blue','LineWidth',1)
+text(p1(2)-220,p1(1)+15,['Widest point: ' num2str(maxDistance*5.47) ' m'],'color', 'blue', 'FontSize',11);
+text(x,y,['Width: ' num2str(dAtCords*2*5.47) ' m'],'color', 'red', 'FontSize',11);
+
+
+
+
+
+
 
 
 

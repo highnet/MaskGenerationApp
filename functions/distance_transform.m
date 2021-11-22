@@ -1,4 +1,4 @@
-function [maxDistance, dAtCords] = distance_transform(img,label, N, x,y)
+function [maxDistance, dAtCords, riverSize, distances] = distance_transform(img,label, N, x,y)
 %Author: Sergej Keser 11727255
 
 %img is a pre-processsed image (i.e. with dilation, erosion and region growig)
@@ -17,12 +17,12 @@ end
 %the following code is there to ensure the right type of input data
 %//////////////////////////////////////////////////////////////////////////
     %if the passed img is not a sigle channel grayscale, convert it to such
-    grayImg=im2gray(img);
+    %grayImg=im2gray(img);
     %convert the image to a binary image using Otsu's threshold
     %get the threshold
-    level=graythresh(grayImg);
+    %level=graythresh(grayImg);
     %use the threshold for creating a binary img
-    bwImg=imbinarize(grayImg, level);
+    %bwImg=imbinarize(grayImg, level);
 %//////////////////////////////////////////////////////////////////////////
 
 %finding the biggest region, i.e. the region that represent the main
@@ -37,9 +37,10 @@ end
     end
     
     %Using the max() function to find the biggest region
-    M = max(maxRegion(:));
+    riverSize = max(maxRegion(:));
+
     for labelIndex=1:N
-        if(maxRegion(labelIndex)==M)
+        if(maxRegion(labelIndex)==riverSize)
           break;
         end
     end
@@ -50,10 +51,13 @@ river=~(label==labelIndex);
 
 %Apply distance transform
 distances=bwdist(river);
+%figure, imshow(uint8(distances));
+
 %get the bigest distance to the edge for some pixel
 maxDistance=max(distances(:)); 
 
 %getting the distance to the nearest edge for the user-selected coordinates
-temp=bwdist(bwImg);
+temp=bwdist(img);
 dAtCords=temp(y,x);
+
 end
