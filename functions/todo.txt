@@ -4,10 +4,8 @@ multi_mask_to_width.m
 display_widths.m (Requires multi_mask_to_width)
 
 ====Code====
--add distance transform and output the data to script (Sergej)
--add the documentation to the script (Sergej)
-----Apply all to multiple images (All)
-----Plot the data (all)
+----Apply all to multiple images (Everyone)
+----Plot the data (Everyone)
 
 ===Pre-Processing Methods===
 multi_crop_image.m
