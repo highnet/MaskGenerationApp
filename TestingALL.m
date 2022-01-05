@@ -58,8 +58,8 @@ dilatedImg=morph_operation(erodedImg, 'dilate',dilationElement);
 %Note: for now, a downscaled image is used, as the performance of the
 %region growing algorithm has yet to be improved.
 %output: binary image with region growing applied
-scaledImg=imread('LandsatInput5Downscaled.png');
-regionGrowingImg = regionGrowing(scaledImg, 0, 1);
+%scaledImg=imread('LandsatInput5Downscaled.png');
+%regionGrowingImg = regionGrowing(scaledImg, 0, 1);
 %figure, imshow(regionGrowingImg), title('Region Grown Image');
 %//////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +80,7 @@ end
 x=int16(seed(1));
 y=int16(seed(2));
 [maxDistance, dAtCords, riverSize, distances]=distance_transform(dilatedImg,label,N,x,y);
-maxWIdth=2*maxDistance;
+maxWIdth=2*sqrt(maxDistance);
 
 %coordinates of the pixel with the max width.
 [xMax,yMax] = find(distances==maxDistance);
@@ -89,11 +89,11 @@ maxWIdth=2*maxDistance;
 area=riverSize*30;
 
 %formating the output:
-p1 = [xMax,yMax-int16(maxDistance)];
-p2 = [xMax,yMax+int16(maxDistance)];
+p1 = [xMax,yMax-int16(sqrt(maxDistance))];
+p2 = [xMax,yMax+int16(sqrt(maxDistance))];
 text(10,20,['Total surface area of the river: ' num2str(area) ' m^2'],'color', 'yellow', 'FontSize',20);
-plot([p1(2),p2(2)],[p1(1)+15,p2(1)],'Color','blue','LineWidth',1)
-text(p1(2)-220,p1(1)+15,['Widest point: ' num2str(maxDistance*5.47) ' m'],'color', 'blue', 'FontSize',11);
+plot([p1(2),p2(2)],[p1(1),p2(1)],'Color','blue','LineWidth',1)
+text(p1(2),p1(1)+15,['Widest point: ' num2str(sqrt(maxDistance)*5.47) ' m'],'color', 'blue', 'FontSize',11);
 text(x,y,['Width: ' num2str(dAtCords*2*5.47) ' m'],'color', 'red', 'FontSize',11);
 
 

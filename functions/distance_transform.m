@@ -38,7 +38,7 @@ end
     
     %Using the max() function to find the biggest region
     riverSize = max(maxRegion(:));
-
+    
     for labelIndex=1:N
         if(maxRegion(labelIndex)==riverSize)
           break;
@@ -50,14 +50,15 @@ river=~(label==labelIndex);
 %imshow(river);
 
 %Apply distance transform
-distances=bwdist(river);
+distances=DT_2F(imcomplement(river));
 %figure, imshow(uint8(distances));
 
 %get the bigest distance to the edge for some pixel
 maxDistance=max(distances(:)); 
 
 %getting the distance to the nearest edge for the user-selected coordinates
-temp=bwdist(img);
-dAtCords=temp(y,x);
+%temp=bwdist(river);
+dAtCords=distances(y,x);
+dAtCords=sqrt(dAtCords);
 
 end
