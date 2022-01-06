@@ -56,6 +56,7 @@ distances=DT_2F(imcomplement(river));
 %get the bigest distance to the edge for some pixel
 maxDistance=max(distances(:)); 
 
+
 %getting the distance to the nearest edge for the user-selected coordinates
 %temp=bwdist(river);
 dAtCords=distances(y,x);

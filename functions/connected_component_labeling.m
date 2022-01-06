@@ -1,7 +1,7 @@
 function [label_img, label_num] = connected_component_labeling(img)
 [m, n] = size(img);
 s = double(img);
-imshow(mat2gray(s));
+%imshow(mat2gray(s));
 temp = zeros(m, n);
 label = 1;
 ET = [];

@@ -67,7 +67,7 @@ dilatedImg=morph_operation(erodedImg, 'dilate',dilationElement);
 %
 %the goal is to group all the regions so that we can single out the bigest
 %ones representing our body of water
-[label, N]=connected_component_labeling(~dilatedImg,8);
+[label, N]=connected_component_labeling(~dilatedImg);
 %imshow(label2rgb(label,'jet','k','shuffle'));
 
 

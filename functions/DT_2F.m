@@ -26,14 +26,27 @@ for x=1:height
 
         if output2D(x,y)<4
             continue;
-        else
-            radius=sqrt(output2D(x,y))-1;
-            
+        else  
+             radius=sqrt(output2D(x,y))-1;
+% 
+%             yoloI=max([x-radius, 1]):min([height, x+radius]);
+%             yoloJ=max([y-radius, 1]):min([width, y+radius]);
+%             
+%             yoloDx=x-yoloI;
+%             yoloDy=y-yoloJ;
+%             a=yoloDx.*yoloDx;
+%             b=yoloDy.*yoloDy;
+% 
+% 
+%             distance=sqrt(reshape(bsxfun(@plus,a,b.'),1,[]));
+%             distance=distance.*distance;
+% 
+%             B = output2D(yoloI, yoloJ)';
+%             B=reshape(B.', 1, []); 
+%             minDistance=min(distance(distance>1));
 
-            %optimized for better run time, needs more work though
             for i=max([x-radius, 1]):min([height, x+radius])
                 for j=max([y-radius, 1]):min([width, y+radius])
-
                     if output2D(i,j)==0
 
                         dx=x-i;
@@ -49,6 +62,7 @@ for x=1:height
                     end
                 end
             end
+            
         end
     end
 end
