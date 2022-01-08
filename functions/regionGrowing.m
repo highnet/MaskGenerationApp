@@ -13,7 +13,9 @@ function [result] = regionGrowing(image, mask, similarity)
             catch 
             end
 
-            result = or(mask, recursiveSeedGrowing(image, similarity, seed, mask)); 
+            colorValue = image(uint16(seed(1, 2)), uint16(seed(1, 1)), :);
+
+            result = or(mask, recursiveSeedGrowing(image, similarity, seed, mask, colorValue)); 
             %add newly created mask to the existing mask
 
             imshow(im2uint8(cat(3,result,result,result)) + image); % show the combined image 
