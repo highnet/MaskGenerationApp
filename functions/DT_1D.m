@@ -1,6 +1,6 @@
-function [output] = DT_1D(input, pass)
+%Written by: Sergej Keser 11727255
 %Distance transform on a 1 dimensional structure
-
+function [output] = DT_1D(input, pass)
 INF=1000000000000000000000000000000000;
 
 [rows, columns]=size(input);

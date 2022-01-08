@@ -1,9 +1,10 @@
-function [maxDistance, dAtCords, riverSize, distances] = distance_transform(img,label, N, x,y)
 %Author: Sergej Keser 11727255
 
 %img is a pre-processsed image (i.e. with dilation, erosion and region growig)
 %label represents a mask with N conected components
 %x,y is an optional input used for calls in GUI
+
+function [maxDistance, dAtCords, riverSize, distances] = distance_transform(label, N, x,y)
 
 if ~exist("x","var")
      %if the parameter does not exist, we default it to something
@@ -47,14 +48,17 @@ end
 
 %component representing the river as a binary image, 
 river=~(label==labelIndex);
-%imshow(river);
+% disp(river);
+% imshow(river);
+imshow(river);
 
 %Apply distance transform
 distances=DT_2F(imcomplement(river));
 %figure, imshow(uint8(distances));
 
 %get the bigest distance to the edge for some pixel
-maxDistance=max(distances(:)); 
+maxDistance=max(max(distances));
+
 
 
 %getting the distance to the nearest edge for the user-selected coordinates
