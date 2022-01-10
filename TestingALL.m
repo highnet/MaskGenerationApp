@@ -24,7 +24,7 @@
 
 %img=imread('LandsatInput1.png');
 %img=imread('LandsatInput2.png');
-img=imread('LandsatInput5.png');
+img=imread('2013.png');
 %img=imread('LandsatInput6.png');
 %img=imread('LandsatInput7.png');
 %img=imread('LandsatInput8.png');
@@ -68,7 +68,9 @@ dilatedImg=morph_operation(erodedImg, 'dilate',dilationElement);
 %the goal is to group all the regions so that we can single out the bigest
 %ones representing our body of water
 [label, N]=connected_component_labeling(~dilatedImg);
-%imshow(label2rgb(label,'jet','k','shuffle'));
+%[label]=bwlabel(~dilatedImg);
+%coloredLabels = label2rgb (labeledImage, 'hsv', 'k', 'shuffle');
+figure, imshow(label2rgb(label,'jet','k','shuffle'));
 
 
 %Gettign the coordinates in order to visualise the data
@@ -79,7 +81,7 @@ end
 %Getting the max width of the river and a distance to edge at user coords
 x=int16(seed(1));
 y=int16(seed(2));
-[maxDistance, dAtCords, riverSize, distances]=distance_transform(dilatedImg,label,N,x,y);
+[maxDistance, dAtCords, riverSize, distances]=distance_transform(label,N,x,y);
 maxWIdth=2*sqrt(maxDistance);
 
 %coordinates of the pixel with the max width.
