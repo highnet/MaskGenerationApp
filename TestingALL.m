@@ -10,15 +10,14 @@
 % initialization of the input images
 
 
-I=imread('2013.png');
- [r n p]=size(I);  
-
- Manifold=zeros(r,n,p,m); 
- x=2013:2:m
- for x=2013:2:m
- filename=strcat(num2str(x),'.png');
- Manifold(x)=imread(filename);
- end
+I=imread('Lago1.jpg');
+[r,n,p]=size(I);
+m=8;
+Manifold=zeros(r,n,p,m);
+for x=1:m
+    filename=strcat('Lago',num2str(x),'.jpg');
+    Manifold(:,:,:,x)=imread(filename);
+end
 imshow(Manifold(1));
 %img=imread('LandsatInput6.png');
 %img=imread('LandsatInput7.png');
